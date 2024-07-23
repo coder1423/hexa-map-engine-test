@@ -21,7 +21,7 @@ export class Screen {
 
     new ScreenReSize(canvas, draw);
     new ScreenWheel(canvas, 격자크기, 화면위치, draw);
-    new Mousedown(canvas, 격자크기, draw);
+    new Mousedown(canvas, 화면위치, draw);
   }
 }
 
