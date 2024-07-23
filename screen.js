@@ -61,13 +61,11 @@ class ScreenWheel {
       const 기존격자배율 = 격자배율;
       격자배율 = limitedToRange(격자배율-e.deltaY*mulWheel, min, max);
       [격자크기[x], 격자크기[y]] = clacTileSize(격자배율);
-      
-      const 기존위치차 = Vector2.difference(화면위치, [e.offsetX, e.offsetY]);
-      [화면위치[x], 화면위치[y]] = Vector2.sum([
-        Vector2.scalarMul(기존위치차, -격자배율/기존격자배율),
-        기존위치차,
-        화면위치
-      ])
+
+      [화면위치[x], 화면위치[y]] = Vector2.add(
+        Vector2.scalarMul([e.offsetX, e.offsetY], 1-격자배율/기존격자배율),
+        Vector2.scalarMul(화면위치, 격자배율/기존격자배율)
+      )
 
       draw();
     }
