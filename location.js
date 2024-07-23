@@ -2,10 +2,6 @@
 import {difference as vector2Difference} from './vector2.js';
 const [x, y] = [0, 1];
 
-export function getLocationByVector() {
-  
-}
-
 /**
  * @param {Number[]} location
  * @param {Number[]} max
