@@ -17,6 +17,16 @@ export function sum(vector2Arr) {
  * @param {Number[]} reference
  * @param {Number[]} target
  */
+export function add(reference, target) {
+  return [
+    reference[x] + target[x],
+    reference[y] + target[y]
+  ]
+}
+/**
+ * @param {Number[]} reference
+ * @param {Number[]} target
+ */
 export function difference(reference, target) {
   return [
     target[x] - reference[x],
