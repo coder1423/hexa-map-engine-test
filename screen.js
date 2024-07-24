@@ -6,6 +6,8 @@
  * 
  * 외부에서 직접 접근이 불가능 하더라도 클로저 역할이면 class.
  * 내부 변수가 남지 않는 순수함수만 function.
+ * 기능상의 큰 차이는 없지만, 역할을 명확히 구분하기 위해 사용?
+ * 단, 커링은 예외 혹은 화살표=> 함수로 정의.
  */
 import * as Vector2 from './vector2.js';
 const [x, y] = [0, 1];
@@ -22,9 +24,9 @@ export class Screen {
     let 화면위치 = [0,0], 격자크기 = [10,10];
     const draw = renderer(canvas, 화면위치, 격자크기);
 
-    new ScreenReSize(canvas, draw);
     new ScreenWheel(canvas, 화면위치, 격자크기, draw);
-    new Mousedown(canvas, 화면위치, draw);
+    new Mousedown(canvas, 화면위치, 격자크기, draw);
+    new ScreenReSize(canvas, draw);
   }
 }
 
@@ -53,14 +55,16 @@ class ScreenWheel {
    */
   constructor(node, 화면위치, 격자크기, draw) {
     /** @param {Number} size */
-    const clacTileSize = size => [size*3**0.5, size*1.5];
+    function updateTileSize(size) {
+      [격자크기[x], 격자크기[y]] = [size*3**0.5/2, size/2];
+    }
     let mulWheel = 0.03, 격자배율 = 10, min = 5, max = 50;
 
     /** @param {WheelEvent} e */
     function wheel(e) {
       const 기존격자배율 = 격자배율;
       격자배율 = limitedToRange(격자배율-e.deltaY*mulWheel, min, max);
-      [격자크기[x], 격자크기[y]] = clacTileSize(격자배율);
+      updateTileSize(격자배율);
 
       [화면위치[x], 화면위치[y]] = Vector2.add(
         Vector2.scalarMul([e.offsetX, e.offsetY], 1-격자배율/기존격자배율),
@@ -70,7 +74,7 @@ class ScreenWheel {
       draw();
     }
 
-    [격자크기[x], 격자크기[y]] = clacTileSize(격자배율);
+    updateTileSize(격자배율);
     node.addEventListener('wheel', wheel);
   }
 }
@@ -79,9 +83,10 @@ class Mousedown {
   /**
    * @param {HTMLElement} node
    * @param {Number[]} 화면위치
+   * @param {Number[]} 격자크기
    * @param {() => void} draw
    */
-  constructor(node, 화면위치, draw) {
+  constructor(node, 화면위치, 격자크기, draw) {
     /** @param {MouseEvent} e */
     function mousedown(e) {
       switch (e.button) {
@@ -89,7 +94,7 @@ class Mousedown {
           new ScreenMouseWheelDown(node, 화면위치, [e.offsetX, e.offsetY], draw);
           break;
         case 0: // 좌클릭
-          
+          console.log(getLocationByVector(Vector2.difference(화면위치, [e.offsetX, e.offsetY]), 격자크기))
           break;
         case 2: // 우클릭
           
@@ -123,8 +128,16 @@ class ScreenMouseWheelDown {
   }
 }
 
-function getLocationByVector() {
-  
+/**
+ * @param {Number[]} vector
+ * @param {Number[]} divisor
+ */
+function getLocationByVector(vector, divisor) {
+  const location = Vector2.divfloor(
+    [vector [x], vector[y] - divisor[y] / 2],
+    [divisor[x], divisor[y] * 3]
+  )
+  return [ (location[x] - (location[y]&1))>>1, location[y] ];
 }
 
 /**

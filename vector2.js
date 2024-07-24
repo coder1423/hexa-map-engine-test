@@ -43,6 +43,32 @@ export function scalarMul(vector2, scalar) {
 }
 
 /**
+ * @param {Number[]} dividend
+ * @param {Number[]} divisor
+ */
+export function divfloor(dividend, divisor) {
+  return [
+    Math.floor(dividend[x] / divisor[x]),
+    Math.floor(dividend[y] / divisor[y])
+  ]
+}
+
+/**
+ * @param {Number[]} dividend
+ * @param {Number[]} divisor
+ */
+export function divmod(dividend, divisor) {
+  const remainder = [
+    dividend[x] % divisor[x],
+    dividend[y] % divisor[y]
+  ], quotient = [
+    (dividend[x] - remainder[x]) / divisor[x],
+    (dividend[y] - remainder[y]) / divisor[y]
+  ]
+  return [quotient, remainder];
+}
+
+/**
  * @param {Number[]} vector2
  */
 export function hypotenuse(vector2) {

@@ -1,5 +1,5 @@
 // @ts-check
-import {difference as vector2Difference} from './vector2.js';
+import * as Vector2 from './vector2.js';
 const [x, y] = [0, 1];
 
 /**
@@ -47,7 +47,7 @@ export function getLocationsByStraight(reference, relative) {
  * @param {Number[]} target
  */
 export function getRelativeLocationByTwoLocations(reference, target) {
-  const [dx, dy] = vector2Difference(reference, target);
+  const [dx, dy] = Vector2.difference(reference, target);
   return [
     dx + 정보정(dx, dy, reference[y]),
     dy
@@ -71,8 +71,8 @@ export function getLocationByRelativeLocation(reference, relative) {
  */
 function 정보정(dx, dy, referenceY) {
   return dx < 0?
-    -(1 & Math.abs(dy) & referenceY)
-    : 1 & Math.abs(dy) &(referenceY ^ 1)
+    -(1 & dy & referenceY)
+    : 1 & dy &(referenceY ^ 1)
 }
 /**
  * @param {Number[]} relative
@@ -80,6 +80,6 @@ function 정보정(dx, dy, referenceY) {
  */
 function 역보정(relative, referenceY) {
   return relative[x] > 0?
-    -(1 & Math.abs(relative[y]) &(referenceY ^ 1))
-    : 1 & Math.abs(relative[y]) & referenceY
+    -(1 & relative[y] &(referenceY ^ 1))
+    : 1 & relative[y] & referenceY
 }

@@ -10,7 +10,7 @@ export const renderer = () => (canvas, 화면위치, 격자크기) => () => { //
   if (!ctx) return;
   ctx.clearRect(0,0, canvas.width, canvas.height);
   ctx.fillStyle = 'rgb(0, 0, 0)';
-  ctx.fillRect(화면위치[x], 화면위치[y], 격자크기[x], 격자크기[y]);
+  ctx.fillRect(화면위치[x], 화면위치[y], 격자크기[x]*2, 격자크기[y]*4);
   // ctx.beginPath();
   //   ctx.arc(vector[x], vector[y], edge, 0, 2*Math.PI);
   //   ctx.fill();
