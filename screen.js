@@ -10,7 +10,7 @@
  * 단, 커링은 예외 혹은 화살표=> 함수로 정의.
  */
 import * as Vector2 from './vector2.js';
-const [x, y] = [0, 1];
+import {getLocationByVector} from './location.js';
 
 export class Screen {
   /**
@@ -58,7 +58,7 @@ class ScreenWheel {
   constructor(node, 화면위치, 격자크기, draw) {
     /** @param {Number} size */
     function updateTileSize(size) {
-      [격자크기[x], 격자크기[y]] = [size*3**0.5/2, size/2];
+      Vector2.update(격자크기, [size*3**0.5/2, size/2])
     }
     let mulWheel = 0.03, 격자배율 = 15, min = 5, max = 50;
 
@@ -68,10 +68,10 @@ class ScreenWheel {
       격자배율 = limitedToRange(격자배율-e.deltaY*mulWheel, min, max);
       updateTileSize(격자배율);
 
-      [화면위치[x], 화면위치[y]] = Vector2.add(
+      Vector2.update(화면위치, Vector2.add(
         Vector2.scalarMul([e.offsetX, e.offsetY], 1-격자배율/기존격자배율),
         Vector2.scalarMul(화면위치, 격자배율/기존격자배율)
-      )
+      ))
 
       draw();
     }
@@ -118,7 +118,7 @@ class ScreenMouseWheelDown {
 
     /** @param {MouseEvent} e */
     function mousemove(e) {
-      [화면위치[x], 화면위치[y]] = Vector2.difference(reference, [e.offsetX, e.offsetY]);
+      Vector2.update(화면위치, Vector2.difference(reference, [e.offsetX, e.offsetY]));
       draw();
     }
     function mouseup() {
@@ -128,18 +128,6 @@ class ScreenMouseWheelDown {
     node.addEventListener('mousemove', mousemove);
     addEventListener('mouseup', mouseup, {once : true});
   }
-}
-
-/**
- * @param {Number[]} vector
- * @param {Number[]} divisor
- */
-function getLocationByVector(vector, divisor) {
-  const location = Vector2.divfloor(
-    [vector [x], vector[y] - divisor[y] / 2],
-    [divisor[x], divisor[y] * 3]
-  )
-  return [ (location[x] - (location[y]&1))>>1, location[y] ];
 }
 
 /**

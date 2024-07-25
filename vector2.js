@@ -74,3 +74,11 @@ export function divmod(dividend, divisor) {
 export function hypotenuse(vector2) {
   return ( vector2[x]**2 + vector2[y]**2 )**0.5;
 }
+
+/**
+ * @param {Number[]} existing
+ * @param {Number[]} updated
+ */
+export function update(existing, updated) {
+  [existing[x], existing[y]] = updated;
+}

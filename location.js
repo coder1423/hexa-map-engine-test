@@ -3,6 +3,29 @@ import * as Vector2 from './vector2.js';
 const [x, y] = [0, 1];
 
 /**
+ * @param {Number[]} vector
+ * @param {Number[]} divisor
+ */
+export function getLocationByVector(vector, divisor) {
+  const location = Vector2.divfloor(
+    [vector [x], vector[y] - divisor[y] / 2],
+    [divisor[x], divisor[y] * 3]
+  )
+  return [ (location[x] - (location[y]&1))>>1, location[y] ];
+}
+
+/**
+ * @param {Number[]} location
+ * @param {Number[]} max
+ */
+export function isValidLocation(location, max) {
+  return (
+    0 <= location[x] && location[x] < max[x] &&
+    0 <= location[y] && location[y] < max[y]
+  )
+}
+
+/**
  * @param {Number[]} location
  * @param {Number[]} max
  */
