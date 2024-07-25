@@ -15,14 +15,16 @@ const [x, y] = [0, 1];
 export class Screen {
   /**
    * @param {HTMLElement} rootNode
-   * @param {(canvas: HTMLCanvasElement, 화면위치: Number[], 격자크기: Number[]) => () => void} renderer
+   * @param {(ctx: CanvasRenderingContext2D, 화면위치: Number[], 격자크기: Number[]) => () => void} renderer
    */
   constructor(rootNode, renderer) {
     const canvas = rootNode.appendChild(document.createElement('canvas'));
     canvas.classList.add('layer');
 
     let 화면위치 = [0,0], 격자크기 = [10,10];
-    const draw = renderer(canvas, 화면위치, 격자크기);
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const draw = renderer(ctx, 화면위치, 격자크기);
 
     new ScreenWheel(canvas, 화면위치, 격자크기, draw);
     new Mousedown(canvas, 화면위치, 격자크기, draw);
@@ -58,7 +60,7 @@ class ScreenWheel {
     function updateTileSize(size) {
       [격자크기[x], 격자크기[y]] = [size*3**0.5/2, size/2];
     }
-    let mulWheel = 0.03, 격자배율 = 10, min = 5, max = 50;
+    let mulWheel = 0.03, 격자배율 = 15, min = 5, max = 50;
 
     /** @param {WheelEvent} e */
     function wheel(e) {
