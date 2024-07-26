@@ -1,5 +1,5 @@
 // @ts-check
-import {Heap} from './heap.js';
+import {PriorityQueue} from './priority-queue.js';
 
 /**
  * @param {(node: Number) => Number} calcCost
@@ -13,7 +13,7 @@ export function getPathTreeByPossible(calcCost, getAround, initialValue, initial
     tree = [],
     /** @type {Number[]} */
     map  = [],
-    heap = new Heap((a, b) => map[b] - map[a], [initialNode]);
+    heap = new PriorityQueue((a, b) => map[b] - map[a], [initialNode]);
   map[initialNode] = initialValue;
 
   for (const referenceNode of heap) {

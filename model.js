@@ -10,6 +10,8 @@
  * 뷰모델에 데이터 업데이트 콜백을 넣어서 draw 렌더링 연결하는 것 고려.
  */
 
+import * as Location from './location.js';
+
 /**
  * @param {Number[]} indexArr
  */

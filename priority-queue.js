@@ -1,6 +1,6 @@
 // @ts-check
 
-export class Heap {
+export class PriorityQueue {
   /**
    * @param {(a: Number, b: Number) => Number} compareFn
    * @param {Number[]} values
