@@ -21,14 +21,14 @@ export class Screen {
     const canvas = root.appendChild(document.createElement('canvas'));
     canvas.classList.add('layer');
 
-    new ScreenWheel(canvas, 화면위치, 격자크기);
-    new Mousedown(canvas, 화면위치, 격자크기);
-    new ScreenReSize(canvas);
+    new Wheel(canvas, 화면위치, 격자크기);
+    new MouseDown(canvas, 화면위치, 격자크기);
+    new ReSize(canvas);
     new Renderer(canvas, 화면위치, 격자크기); // 렌더러의 출력 데이터도 여기를 통해서 연결하기?
   }
 }
 
-class ScreenReSize {
+class ReSize {
   /**
    * @param {HTMLCanvasElement} canvas
    */
@@ -44,20 +44,20 @@ class ScreenReSize {
   }
 }
 
-class ScreenWheel {
+class Wheel {
   /**
    * @param {HTMLElement} node
    * @param {Number[]} 화면위치
    * @param {Number[]} 격자크기
    */
   constructor(node, 화면위치, 격자크기) {
-    let mulWheel = 0.03, 격자배율 = 15, min = 8, max = 50;
+    let mulWheel = 0.03, 격자배율 = 15, min = 10, max = 50;
     updateTileSize(격자배율);
     node.addEventListener('wheel', wheel);
 
     /** @param {Number} size */
     function updateTileSize(size) {
-      Vector2.update(격자크기, [size*3**0.5/2, size/2])
+      Vector2.update(격자크기, [size*3**0.5/2, size/2]);
     }
 
     /** @param {WheelEvent} e */
@@ -75,7 +75,7 @@ class ScreenWheel {
   }
 }
 
-class Mousedown {
+class MouseDown {
   /**
    * @param {HTMLElement} node
    * @param {Number[]} 화면위치
