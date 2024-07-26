@@ -13,8 +13,8 @@ export class Renderer{
    */
   constructor(canvas, 화면위치, 격자크기) {
     const ctx = canvas.getContext('2d');
-
     performFrame();
+
     function performFrame() {
       if (!ctx) return;
       draw(ctx, 화면위치, 격자크기);
@@ -29,11 +29,13 @@ export class Renderer{
  * @param {Number[]} 격자크기
  */
 function draw(ctx, 화면위치, 격자크기) {
-  ctx.clearRect(0,0, ctx.canvas.width, ctx.canvas.height);
+  const 화면크기 = [ctx.canvas.width, ctx.canvas.height];
+  ctx.clearRect(0,0, 화면크기[x], 화면크기[y]);
 
   // 격자크기[y] == 격자배율 / 2
   const padding = 격자크기[y] / 20, padding격자크기 = Vector2.add(격자크기, [-padding,-padding]);
-  for (const 위치 of 출력위치(화면위치, 격자크기, [ctx.canvas.width, ctx.canvas.height])) {
+  for (const 위치 of 출력위치(화면위치, 격자크기, 화면크기)) {
+    if (위치[x] < 0 || 100 <= 위치[x] || 위치[y] < 0 || 100 <= 위치[y]) continue;
     const drawingVector = locationToDrawingVector(위치, 화면위치, 격자크기, padding);
     if (위치[x] == 0 && 위치[y] == 0) {
       ctx.fillStyle = 'rgb(255, 0, 0)';
@@ -67,12 +69,13 @@ function drawTilePath(ctx, [px, py], [dx, dy]) {
  * @param {Number[]} 화면크기
  */
 function* 출력위치(화면위치, 격자크기, 화면크기) {
-  const 타일크기 = [격자크기[x]*2, 격자크기[y]*3];
-  const 시작 = Vector2.divfloor(Vector2.scalarMul(화면위치, -1), 타일크기);
-  const 끝 = Vector2.add(시작, Vector2.divfloor(화면크기, 타일크기)).map(val => Math.min(val+1, 100));
-  for (let 위치Y = Math.max(시작[y]-1, 0); 위치Y <= 끝[y]; 위치Y++)
-  for (let 위치X = Math.max(시작[x]-1, 0); 위치X <= 끝[x]; 위치X++) {
-    yield [위치X, 위치Y];
+  const 타일크기 = [격자크기[x]*2, 격자크기[y]*3],
+    시작 = Vector2.divfloor(Vector2.scalarMul(화면위치, -1), 타일크기),
+    반복횟수 = Vector2.divfloor(화면크기, 타일크기);
+
+  for (let iy = 반복횟수[y]+3; iy--;)
+  for (let ix = 반복횟수[x]+3; ix--;) {
+    yield Vector2.add(시작, [ix-1, iy-1]);
   }
 }
 
