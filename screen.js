@@ -51,13 +51,14 @@ class Wheel {
    * @param {Number[]} 격자크기
    */
   constructor(node, 화면위치, 격자크기) {
-    let mulWheel = 0.03, 격자배율 = 15, min = 10, max = 50;
+    const mulWheel = 0.03, min = 5, max = 50, 격자비율 = [3**0.5/2, 1/2];
+    let 격자배율 = 15;
     updateTileSize(격자배율);
     node.addEventListener('wheel', wheel);
 
     /** @param {Number} size */
     function updateTileSize(size) {
-      Vector2.update(격자크기, [size*3**0.5/2, size/2]);
+      Vector2.update(격자크기, Vector2.scalarMul(격자비율, size));
     }
 
     /** @param {WheelEvent} e */

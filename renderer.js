@@ -26,24 +26,23 @@ export class Renderer{
 /**
  * @param {CanvasRenderingContext2D} ctx
  * @param {Number[]} 화면위치
- * @param {Number[]} 격자크기
+ * @param {Number[]} 격자크기 격자크기[y] == 격자배율 / 2
  */
 function draw(ctx, 화면위치, 격자크기) {
   const 화면크기 = [ctx.canvas.width, ctx.canvas.height];
+  const padding = 격자크기[y] / 40, padding격자크기 = Vector2.add(격자크기, [-padding,-padding]);
   ctx.clearRect(0,0, 화면크기[x], 화면크기[y]);
 
-  // 격자크기[y] == 격자배율 / 2
-  const padding = 격자크기[y] / 20, padding격자크기 = Vector2.add(격자크기, [-padding,-padding]);
   for (const 위치 of 출력위치(화면위치, 격자크기, 화면크기)) {
     if (위치[x] < 0 || 100 <= 위치[x] || 위치[y] < 0 || 100 <= 위치[y]) continue;
     const drawingVector = locationToDrawingVector(위치, 화면위치, 격자크기, padding);
+
     if (위치[x] == 0 && 위치[y] == 0) {
       ctx.fillStyle = 'rgb(255, 0, 0)';
     } else {
-      ctx.fillStyle = 'rgb(255, 255, 255)';
+      ctx.fillStyle = 'rgb(190, 210, 150)';
     }
-    drawTilePath(ctx, drawingVector, padding격자크기);
-    ctx.fill();
+    drawTile(ctx, drawingVector, padding격자크기, 격자크기[y]);
   }
 }
 
@@ -51,16 +50,22 @@ function draw(ctx, 화면위치, 격자크기) {
  * @param {CanvasRenderingContext2D} ctx
  * @param {Number[]} drawingVector
  * @param {Number[]} 격자크기
+ * @param {Number} 격자크기Y
  */
-function drawTilePath(ctx, [px, py], [dx, dy]) {
-  ctx.beginPath();
-  ctx.moveTo(px     ,py+dy  );
-  ctx.lineTo(px+dx  ,py     );
-  ctx.lineTo(px+dx*2,py+dy  );
-  ctx.lineTo(px+dx*2,py+dy*3);
-  ctx.lineTo(px+dx  ,py+dy*4);
-  ctx.lineTo(px     ,py+dy*3);
-  ctx.closePath();
+function drawTile(ctx, [px, py], [dx, dy], 격자크기Y) {
+  if (격자크기Y > 5) {
+    ctx.beginPath();
+      ctx.moveTo(px     ,py+dy  );
+      ctx.lineTo(px+dx  ,py     );
+      ctx.lineTo(px+dx*2,py+dy  );
+      ctx.lineTo(px+dx*2,py+dy*3);
+      ctx.lineTo(px+dx  ,py+dy*4);
+      ctx.lineTo(px     ,py+dy*3);
+    ctx.closePath();
+    ctx.fill();
+  } else {
+    ctx.fillRect(px, py+격자크기Y/2, dx*2, dy*3);
+  }
 }
 
 /**
