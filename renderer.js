@@ -35,7 +35,7 @@ function draw(ctx, 화면위치, 격자크기) {
 
   for (const 위치 of 출력위치(화면위치, 격자크기, 화면크기)) {
     if (위치[x] < 0 || 100 <= 위치[x] || 위치[y] < 0 || 100 <= 위치[y]) continue;
-    const drawingVector = locationToDrawingVector(위치, 화면위치, 격자크기, padding);
+    const drawingVector = getDrawingVectorByLocation(위치, 화면위치, 격자크기, padding);
 
     if (위치[x] == 0 && 위치[y] == 0) {
       ctx.fillStyle = 'rgb(255, 0, 0)';
@@ -90,7 +90,7 @@ function* 출력위치(화면위치, 격자크기, 화면크기) {
  * @param {Number[]} 격자크기
  * @param {Number} padding
  */
-function locationToDrawingVector(location, 화면위치, 격자크기, padding) {
+function getDrawingVectorByLocation(location, 화면위치, 격자크기, padding) {
   return [
     화면위치[x] + padding + location[x]*격자크기[x]*2 + (location[y] & 1)*격자크기[x],
     화면위치[y] + padding + location[y]*격자크기[y]*3

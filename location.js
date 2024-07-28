@@ -29,7 +29,7 @@ export function isValidLocation(location, max) {
  * @param {Number[]} location
  * @param {Number[]} max
  */
-export function locationToIndex(location, max) {
+export function getIndexByLocation(location, max) {
   if (0 <= location[x] && location[x] < max[x]) {
     return location[x] + max[x]*location[y];
   }
@@ -38,7 +38,7 @@ export function locationToIndex(location, max) {
  * @param {Number} index
  * @param {Number[]} max
  */
-export function indexToLocation(index, max) {
+export function getLocationByIndex(index, max) {
   const locationX = index % max[y];
   return [locationX, (index-locationX) / max[y]];
 }
