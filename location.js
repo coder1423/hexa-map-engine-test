@@ -30,7 +30,10 @@ export function isValidLocation(location, max) {
  * @param {Number[]} max
  */
 export function getIndexByLocation(location, max) {
-  if (0 <= location[x] && location[x] < max[x]) {
+  if (
+    0 <= location[x] && location[x] < max[x] &&
+    0 <= location[y] && location[y] < max[y]
+  ) {
     return location[x] + max[x]*location[y];
   }
 }
@@ -51,9 +54,10 @@ export function getDistanceByRelativeLocation(relative) {
   return dy + Math.max(dx - (dy >>> 1) + (dy & 1), 0); // dy 나누기 2의 반올림.
 }
 /**
+ * @param {Number} location
  * @param {Number} distance
  */
-export function getLocationsByDistance(distance) {
+export function getLocationsByDistance(location, distance) {
 
 }
 

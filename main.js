@@ -1,12 +1,14 @@
 // @ts-check
 import {Screen} from './screen.js';
-import {Renderer} from './renderer.js';
+import {Model} from './model.js';
+import * as Map from './map-data.js';
 
 addEventListener('load',
   () => {
     const mainNode = document.querySelector('main');
     if (!mainNode) return;
-    new Screen(mainNode);
+    const model = new Model(Map.size, Map.data, Map.palette);
+    new Screen(mainNode, model.getRenderingDataByLocation, model.triggerDataChangeByLocation);
   }, {once : true}
 )
 oncontextmenu = e => e.preventDefault();

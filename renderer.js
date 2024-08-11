@@ -3,46 +3,33 @@ import * as Vector2 from './vector2.js';
 
 const [x, y] = [0, 1];
 
-// 첫번째 파라미터로 렌더링할 데이터 테이블 받아오기?
-
-export class Renderer{
+export class Renderer {
   /**
-   * @param {HTMLCanvasElement} canvas
+   * @param {CanvasRenderingContext2D} ctx
    * @param {Number[]} 화면위치
    * @param {Number[]} 격자크기
+   * @param {(location: number[]) => String | undefined} getRenderingDataByLocation
    */
-  constructor(canvas, 화면위치, 격자크기) {
-    const ctx = canvas.getContext('2d');
-    performFrame();
+  constructor(ctx, 화면위치, 격자크기, getRenderingDataByLocation) {
+    const performFrame = () => {
+      const 화면크기 = [ctx.canvas.width, ctx.canvas.height];
+      const padding = 격자크기[y] / 40, padding격자크기 = Vector2.add(격자크기, [-padding,-padding]);
+      ctx.clearRect(0,0, 화면크기[x], 화면크기[y]);
 
-    function performFrame() {
-      if (!ctx) return;
-      draw(ctx, 화면위치, 격자크기);
+      for (const location of 출력위치(화면위치, 격자크기, 화면크기)) {
+        const tileColor = getRenderingDataByLocation(location);
+        if (tileColor === undefined) continue;
+
+        const drawingVector = getDrawingVectorByLocation(location, 화면위치, 격자크기, padding);
+        ctx.fillStyle = tileColor;
+    
+        drawTile(ctx, drawingVector, padding격자크기, 격자크기[y]);
+      }
+
       requestAnimationFrame(performFrame);
     }
-  }
-}
 
-/**
- * @param {CanvasRenderingContext2D} ctx
- * @param {Number[]} 화면위치
- * @param {Number[]} 격자크기 격자크기[y] == 격자배율 / 2
- */
-function draw(ctx, 화면위치, 격자크기) {
-  const 화면크기 = [ctx.canvas.width, ctx.canvas.height];
-  const padding = 격자크기[y] / 40, padding격자크기 = Vector2.add(격자크기, [-padding,-padding]);
-  ctx.clearRect(0,0, 화면크기[x], 화면크기[y]);
-
-  for (const 위치 of 출력위치(화면위치, 격자크기, 화면크기)) {
-    if (위치[x] < 0 || 100 <= 위치[x] || 위치[y] < 0 || 100 <= 위치[y]) continue;
-    const drawingVector = getDrawingVectorByLocation(위치, 화면위치, 격자크기, padding);
-
-    if (위치[x] == 0 && 위치[y] == 0) {
-      ctx.fillStyle = 'rgb(255, 0, 0)';
-    } else {
-      ctx.fillStyle = 'rgb(190, 210, 150)';
-    }
-    drawTile(ctx, drawingVector, padding격자크기, 격자크기[y]);
+    performFrame();
   }
 }
 

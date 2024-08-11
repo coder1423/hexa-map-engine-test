@@ -14,17 +14,23 @@ import * as Vector2 from './vector2.js';
 import {getLocationByVector} from './location.js';
 
 export class Screen {
-  /** @param {HTMLElement} root */
-  constructor(root) {
+  /**
+   * @param {HTMLElement} root
+   * @param {(location: number[]) => String | undefined} getRenderingDataByLocation
+   * @param {(location: number[]) => void} triggerDataChangeByLocation
+   */
+  constructor(root, getRenderingDataByLocation, triggerDataChangeByLocation) {
     let 화면위치 = [0,0], 격자크기 = [10,10];
 
     const canvas = root.appendChild(document.createElement('canvas'));
     canvas.classList.add('layer');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
     new Wheel(canvas, 화면위치, 격자크기);
-    new MouseDown(canvas, 화면위치, 격자크기);
+    new MouseDown(canvas, 화면위치, 격자크기, triggerDataChangeByLocation);
     new ReSize(canvas);
-    new Renderer(canvas, 화면위치, 격자크기); // 렌더러의 출력 데이터도 여기를 통해서 연결하기?
+    new Renderer(ctx, 화면위치, 격자크기, getRenderingDataByLocation); // 렌더러의 출력 데이터도 여기를 통해서 연결하기?
   }
 }
 
@@ -81,28 +87,32 @@ class MouseDown {
    * @param {HTMLElement} node
    * @param {Number[]} 화면위치
    * @param {Number[]} 격자크기
+   * @param {(location: number[]) => void} triggerDataChangeByLocation
    */
-  constructor(node, 화면위치, 격자크기) {
+  constructor(node, 화면위치, 격자크기, triggerDataChangeByLocation) {
+    /** @param {Number[]} 마우스위치 */
+    const getLocationByOffsetVector = 마우스위치 => getLocationByVector(Vector2.difference(화면위치, 마우스위치), 격자크기);
     node.addEventListener('mousedown', mousedown);
 
     /** @param {MouseEvent} e */
     function mousedown(e) {
       switch (e.button) {
         case 1: // 휠클릭
-          new ScreenMouseWheelDown(node, 화면위치, [e.offsetX, e.offsetY]);
+          new MouseWheelMove(node, 화면위치, [e.offsetX, e.offsetY]);
           break;
         case 0: // 좌클릭
-          console.log(getLocationByVector(Vector2.difference(화면위치, [e.offsetX, e.offsetY]), 격자크기))
+          console.log(getLocationByOffsetVector([e.offsetX, e.offsetY]));
           break;
         case 2: // 우클릭
-          
+          new MouseRightMove(node, getLocationByOffsetVector, triggerDataChangeByLocation);
           break;
       }
     }
 
   }
 }
-class ScreenMouseWheelDown {
+
+class MouseWheelMove {
   /**
    * @param {HTMLElement} node
    * @param {Number[]} 화면위치
@@ -116,6 +126,27 @@ class ScreenMouseWheelDown {
     /** @param {MouseEvent} e */
     function mousemove(e) {
       Vector2.update(화면위치, Vector2.difference(reference, [e.offsetX, e.offsetY]));
+    }
+    function mouseup() {
+      node.removeEventListener('mousemove', mousemove);
+    }
+
+  }
+}
+
+class MouseRightMove {
+  /**
+   * @param {HTMLElement} node
+   * @param {(마우스위치: number[]) => number[]} getLocationByOffsetVector
+   * @param {(location: number[]) => void} triggerDataChangeByLocation
+   */
+  constructor(node, getLocationByOffsetVector, triggerDataChangeByLocation) {
+    node.addEventListener('mousemove', mousemove);
+    addEventListener('mouseup', mouseup, {once : true});
+
+    /** @param {MouseEvent} e */
+    function mousemove(e) {
+      triggerDataChangeByLocation(getLocationByOffsetVector([e.offsetX, e.offsetY]));
     }
     function mouseup() {
       node.removeEventListener('mousemove', mousemove);

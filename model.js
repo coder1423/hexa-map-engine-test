@@ -12,24 +12,55 @@
 
 import * as Location from './location.js';
 
-/**
- * @param {Number[]} indexArr
- */
-function mapTileData(indexArr) {
-
-}
-
-class PathfindingNode {
+export class Model {
   /**
-   * @param {Number} locationIndex
+   * @param {Number[]} mapSize
+   * @param {Number[]} mapData
+   * @param {string[]} mapPalette 
    */
-  constructor(locationIndex) {
+  constructor(mapSize, mapData, mapPalette) {
+    let 지형선택 = 0;
+    const 지형선택Map = new Map([
+      ['Digit1', 1],
+      ['Digit2', 2],
+      ['Digit3', 3],
+      ['Digit4', 4],
+      ['Digit5', 5],
+      ['Digit6', 6],
+      ['Digit7', 7],
+      ['Digit8', 8],
+      ['Digit9', 9],
+      ['Digit0', 0]
+    ])
+    addEventListener('keydown', keydown);
 
-  }
-  calcCost() {
+    /**
+     * @param {Number[]} location
+     */
+    this.getRenderingDataByLocation = location => {
+      const index = Location.getIndexByLocation(location, mapSize);
+      if (index !== undefined) {
+        return mapPalette[mapData[index]];
+      }
+    }
 
-  }
-  getAround() {
+    /**
+     * @param {Number[]} location
+     */
+    this.triggerDataChangeByLocation = location => {
+      const index = Location.getIndexByLocation(location, mapSize);
+      if (index !== undefined) {
+        mapData[index] = 지형선택;
+      }
+    }
+
+    /** @param {KeyboardEvent} e */
+    function keydown(e) {
+      const num = 지형선택Map.get(e.code);
+      if (num !== undefined) {
+        지형선택 = num;
+      }
+    }
 
   }
 }
