@@ -8,25 +8,25 @@ import * as Location from './location.js';
  * @param {(index: Number) => Number} get높이by인덱스
  */
 export function getLocationsBySight(n, 시작, max, get높이by인덱스) {
-  const 시작인덱스 = Location.getIndexByLocation(시작, max);
-  if (시작인덱스 === undefined) return;
-  const 보임집합 = new Set([시작인덱스]),
-    가려짐지도 = [],
-    시작높이 = get높이by인덱스(시작인덱스);
+  const 시작인덱스 = Location.getIndexByLocation(시작, max),
+    보임집합 = new Set([시작인덱스]),
+    가려짐지도 = [];
+  if (시작인덱스 === undefined) return 보임집합;
+  const 시작높이 = get높이by인덱스(시작인덱스);
   가려짐지도[시작인덱스] = 시작높이;
 
   for (const 방향 of 직선방향들)
-  for (let 기존인덱스 = 시작인덱스, i = n; i--;) {
-    const 대상 = Location.getLocationByRelativeLocation(Location.getLocationByIndex(기존인덱스, max), 방향),
+  for (let 기존 = 시작, 기존인덱스 = 시작인덱스, i = n; i--;) {
+    const 대상 = Location.getLocationByRelativeLocation(기존, 방향),
       대상인덱스 = Location.getIndexByLocation(대상, max);
 
     if (대상인덱스 === undefined) break;
-    const 높이 = get높이by인덱스(대상인덱스), 가려짐 = 가려짐지도[기존인덱스];
-    if (가려짐 <= 시작높이) {
-      보임집합.add(대상인덱스);
-    }
+    const 가려짐 = 가려짐지도[기존인덱스],
+      높이 = get높이by인덱스(대상인덱스);
+    if (가려짐 <= 시작높이) 보임집합.add(대상인덱스);
     가려짐지도[대상인덱스] = Math.max(높이, 가려짐);
 
+    기존 = 대상;
     기존인덱스 = 대상인덱스;
   }
 
@@ -39,50 +39,48 @@ export function getLocationsBySight(n, 시작, max, get높이by인덱스) {
     let 가려짐;
     for (const 방향 of 직선방향들) {
       const index = Location.getIndexByLocation(Location.getLocationByRelativeLocation(이전기준, 방향), max);
-      if (index === undefined || 가려짐 !== undefined && 가려짐 < 가려짐지도[index]) break;
+      if (index === undefined || 가려짐 !== undefined && 가려짐 < 가려짐지도[index]) continue;
       가려짐 = 가려짐지도[index];
     }
 
     if (가려짐 === undefined || 기준인덱스 === undefined) break;
     const 높이 = get높이by인덱스(기준인덱스);
-    if (가려짐 <= 시작높이) {
-      보임집합.add(기준인덱스);
-    }
+    if (가려짐 <= 시작높이) 보임집합.add(기준인덱스);
     가려짐지도[기준인덱스] = Math.max(높이, 가려짐);
 
     for (const 방향 of 직선방향들)
-    for (let 이전 = 지금기준, 기존인덱스 = 기준인덱스, 이전비교 = 이전기준, j = i; j--;) {
-      const 대상 = Location.getLocationByRelativeLocation(이전, 방향),
-        비교 = Location.getLocationByRelativeLocation(이전비교, 방향),
-        대상인덱스 = Location.getIndexByLocation(대상, max),
-        비교인덱스 = Location.getIndexByLocation(비교, max);
+    for (let 이전비교 = 이전기준, 기존인덱스 = 기준인덱스, j = i; j--;) {
+      const 비교 = Location.getLocationByRelativeLocation(이전비교, 방향),
+        대상 = Location.getLocationByRelativeLocation(비교, 기준방향),
+        비교인덱스 = Location.getIndexByLocation(비교, max),
+        대상인덱스 = Location.getIndexByLocation(대상, max);
 
       if (대상인덱스 === undefined || 비교인덱스 === undefined) break;
-      const 높이 = get높이by인덱스(대상인덱스), 가려짐 = Math.max(가려짐지도[기존인덱스], 가려짐지도[비교인덱스]);
-      if (가려짐 <= 시작높이) {
-        보임집합.add(대상인덱스);
-      }
+      const 가려짐 = Math.max(가려짐지도[기존인덱스], 가려짐지도[비교인덱스]),
+        높이 = get높이by인덱스(대상인덱스);
+      if (가려짐 <= 시작높이) 보임집합.add(대상인덱스);
       가려짐지도[대상인덱스] = Math.max(높이, 가려짐);
 
-      이전 = 대상;
-      기존인덱스 = 대상인덱스;
       이전비교 = 비교;
+      기존인덱스 = 대상인덱스;
     }
 
     이전기준 = 지금기준;
   }
+
+  return 보임집합;
 }
 
 const 직선방향들 = [
-  [0,0],[0,0],[0,0],
-  [0,0],[0,0],[0,0]
+  [ 1,1],[ 1,0],[ 1,-1],
+  [-1,1],[-1,0],[-1,-1]
 ],
 기준직선방향들 = [
-  {기준방향: [0,0], 직선방향들: [[0,0],[0,0]]},
-  {기준방향: [0,0], 직선방향들: [[0,0],[0,0]]},
-  {기준방향: [0,0], 직선방향들: [[0,0],[0,0]]},
+  {기준방향: [ 0, 2], 직선방향들: [[-1, 1],[ 1, 1]]},
+  {기준방향: [ 2, 1], 직선방향들: [[ 1, 1],[ 1, 0]]},
+  {기준방향: [ 2,-1], 직선방향들: [[ 1, 0],[ 1,-1]]},
 
-  {기준방향: [0,0], 직선방향들: [[0,0],[0,0]]},
-  {기준방향: [0,0], 직선방향들: [[0,0],[0,0]]},
-  {기준방향: [0,0], 직선방향들: [[0,0],[0,0]]},
+  {기준방향: [ 0,-2], 직선방향들: [[ 1,-1],[-1,-1]]},
+  {기준방향: [-2,-1], 직선방향들: [[-1,-1],[-1, 0]]},
+  {기준방향: [-2, 1], 직선방향들: [[-1, 0],[-1, 1]]},
 ];
