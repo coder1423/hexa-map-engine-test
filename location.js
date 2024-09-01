@@ -45,6 +45,18 @@ export function getLocationByIndex(index, max) {
   const locationX = index % max[y];
   return [locationX, (index-locationX) / max[y]];
 }
+/**
+ * @param {Number[][]} locations
+ * @param {Number[]} max
+ */
+export function getIndexsByLocations(locations, max) {
+  const indexs = [];
+  for (const location of locations) {
+    const index = getIndexByLocation(location, max);
+    if (index !== undefined) indexs.push(index);
+  }
+  return indexs;
+}
 
 /**
  * @param {Number[]} relative
@@ -54,20 +66,65 @@ export function getDistanceByRelativeLocation(relative) {
   return dy + Math.max(dx - (dy >>> 1) + (dy & 1), 0); // dy 나누기 2의 반올림.
 }
 /**
- * @param {Number} location
+ * @param {Number[]} location
  * @param {Number} distance
  */
 export function getLocationsByDistance(location, distance) {
+  const locations = [];
+  for (let dx = distance+1; --dx;) {
+    locations.push(shiftX(location, dx));
+    locations.push(shiftX(location, -dx));
+  }
+  for (const direction of straightDirections) {
+    let reference = shiftX(location, -distance);
+    for (let yCounter = distance+1; --yCounter;) {
+      reference = getLocationByRelativeLocation(reference, direction);
+      for (let dx = distance + yCounter; dx--;) {
+        locations.push(shiftX(reference, dx));
+      }
+    }
+  }
+  return locations;
+}
 
+const straightDirections = [[1,-1], [1,1]];
+/**
+ * @param {Number[]} location
+ * @param {Number} dx
+ */
+function shiftX([px, py], dx) {
+  return [px + dx, py];
 }
 
 /**
- * @param {Number[]} reference
- * @param {Number[]} relative
+ * @param {Number} index
+ * @param {Number[]} max
  */
-export function getLocationsByStraight(reference, relative) {
-
+export function getIndexsByAround(index, max) {
+  const indexs = [], location = getLocationByIndex(index, max);
+  for (const direction of directions) {
+    const target = getIndexByLocation(getLocationByRelativeLocation(location, direction), max);
+    if (target !== undefined) indexs.push(target);
+  }
+  return indexs;
 }
+const directions = [
+  [ 1,1],[ 1,0],[ 1,-1],
+  [-1,1],[-1,0],[-1,-1]
+]
+
+// /**
+//  * @param {Number} index
+//  * @param {Number[]} max
+//  */
+// export function getIndexsByAround(index, max) {
+//   const indexs = [];
+//   for (const location of getLocationsByDistance(getLocationByIndex(index, max), 1)) {
+//     const target = getIndexByLocation(location, max);
+//     if (target !== undefined) indexs.push(target);
+//   }
+//   return indexs;
+// }
 
 /**
  * @param {Number[]} reference
