@@ -83,3 +83,20 @@ function getDrawingVectorByLocation(location, 화면위치, 격자크기, paddin
     화면위치[y] + padding + location[y]*격자크기[y]*3
   ]
 }
+
+/** @param {Number[]} rgb */
+function getStrByRGB(rgb) {
+  return `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+}
+/**
+ * @param {Number[]} baseRgb
+ * @param {Number[]} rgb
+ * @param {Number} a 0~1
+*/
+function mixRGBs(baseRgb, rgb, a) {
+  return [
+    baseRgb[0] + (rgb[0]-baseRgb[0])*a,
+    baseRgb[1] + (rgb[1]-baseRgb[1])*a,
+    baseRgb[2] + (rgb[2]-baseRgb[2])*a
+  ]
+}
