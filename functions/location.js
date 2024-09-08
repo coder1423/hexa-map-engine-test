@@ -13,6 +13,14 @@ export function getLocationByVector(vector, divisor) {
   )
   return [ (location[x] - (location[y]&1))>>1, location[y] ];
 }
+/**
+ * @param {Number[]} location
+ * @param {Number[]} 격자크기
+ */
+export function getVectorByLocation(location, 격자크기) {
+
+  return [];
+}
 
 /**
  * @param {Number[]} location
@@ -130,7 +138,7 @@ const directions = [
  * @param {Number[]} reference
  * @param {Number[]} target
  */
-export function getRelativeLocationByTwoLocations(reference, target) {
+export function getRelativeLocationByLocations(reference, target) {
   const [dx, dy] = Vector2.difference(reference, target);
   return [
     dx + 정보정(dx, dy, reference[y]),

@@ -1,5 +1,5 @@
 // @ts-check
-import * as Location from './location.js';
+import * as Location from '../location.js';
 
 /**
  * @param {Number} 최대거리

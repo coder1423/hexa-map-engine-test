@@ -1,5 +1,5 @@
 // @ts-check
-import {PriorityQueue} from './priority-queue.js';
+import {PriorityQueue} from '../priority-queue.js';
 
 /**
  * @param {(node: Number) => Number} calcCost
@@ -7,7 +7,7 @@ import {PriorityQueue} from './priority-queue.js';
  * @param {Number} initialValue
  * @param {Number} initialNode
  */
-export function getPathTreeByPossible(calcCost, getAround, initialValue, initialNode) {
+export function getPathtreeByPathfinding(calcCost, getAround, initialValue, initialNode) {
   const nodeSet = new Set([initialNode]),
     /** @type {Number[]} */
     tree = [],
