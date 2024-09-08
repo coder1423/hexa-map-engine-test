@@ -8,8 +8,8 @@ const [x, y] = [0, 1];
  */
 export function getLocationByVector(vector, divisor) {
   const location = Vector2.divfloor(
-    [vector [x], vector[y] - divisor[y] / 2],
-    [divisor[x], divisor[y] * 3]
+    [vector [x], vector[y] - divisor[y]*0.5],
+    [divisor[x], divisor[y]*3]
   )
   return [ (location[x] - (location[y]&1))>>1, location[y] ];
 }
@@ -18,8 +18,10 @@ export function getLocationByVector(vector, divisor) {
  * @param {Number[]} 격자크기
  */
 export function getVectorByLocation(location, 격자크기) {
-
-  return [];
+  return [
+    (location[x] + (location[y]&1)*0.5) * 격자크기[x],
+    location[y] * 격자크기[y]
+  ]
 }
 
 /**
@@ -71,7 +73,7 @@ export function getIndexsByLocations(locations, max) {
  */
 export function getDistanceByRelativeLocation(relative) {
   const [dx, dy] = relative.map(Math.abs);
-  return dy + Math.max(dx - (dy >>> 1) + (dy & 1), 0); // dy 나누기 2의 반올림.
+  return dy + Math.max(dx - Math.ceil(dy * 0.5), 0);
 }
 /**
  * @param {Number[]} location
@@ -120,19 +122,6 @@ const directions = [
   [ 1,1],[ 1,0],[ 1,-1],
   [-1,1],[-1,0],[-1,-1]
 ]
-
-// /**
-//  * @param {Number} index
-//  * @param {Number[]} max
-//  */
-// export function getIndexsByAround(index, max) {
-//   const indexs = [];
-//   for (const location of getLocationsByDistance(getLocationByIndex(index, max), 1)) {
-//     const target = getIndexByLocation(location, max);
-//     if (target !== undefined) indexs.push(target);
-//   }
-//   return indexs;
-// }
 
 /**
  * @param {Number[]} reference
