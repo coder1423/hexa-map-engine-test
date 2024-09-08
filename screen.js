@@ -16,7 +16,7 @@ import {getLocationByVector} from './location.js';
 export class Screen {
   /**
    * @param {HTMLElement} root
-   * @param {(location: number[]) => String | undefined} getRenderingDataByLocation
+   * @param {(location: number[]) => Number[] | undefined} getRenderingDataByLocation
    * @param {(location: number[]) => void} triggerDataChangeByLocation
    */
   constructor(root, getRenderingDataByLocation, triggerDataChangeByLocation) {

@@ -8,7 +8,7 @@ export class Renderer {
    * @param {CanvasRenderingContext2D} ctx
    * @param {Number[]} 화면위치
    * @param {Number[]} 격자크기
-   * @param {(location: number[]) => String | undefined} getRenderingDataByLocation
+   * @param {(location: number[]) => Number[] | undefined} getRenderingDataByLocation
    */
   constructor(ctx, 화면위치, 격자크기, getRenderingDataByLocation) {
     const performFrame = () => {
@@ -17,11 +17,11 @@ export class Renderer {
       ctx.clearRect(0,0, 화면크기[x], 화면크기[y]);
 
       for (const location of 출력위치(화면위치, 격자크기, 화면크기)) {
-        const tileColor = getRenderingDataByLocation(location);
+        let tileColor = getRenderingDataByLocation(location);
         if (tileColor === undefined) continue;
 
         const drawingVector = getDrawingVectorByLocation(location, 화면위치, 격자크기, padding);
-        ctx.fillStyle = tileColor;
+        ctx.fillStyle = getStrByRGB(tileColor);
     
         drawTile(ctx, drawingVector, padding격자크기, 격자크기[y]);
       }

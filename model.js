@@ -16,10 +16,11 @@ export class Model {
   /**
    * @param {Number[]} mapSize
    * @param {Number[]} mapData
-   * @param {string[]} mapPalette 
+   * @param {Number[][]} mapPalette 
    */
   constructor(mapSize, mapData, mapPalette) {
     let 지형선택 = 0;
+    const 시야거리 = 10, 이동력 = 10;
     const 지형선택Map = new Map([
       ['Digit1', 1],
       ['Digit2', 2],
