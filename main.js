@@ -1,6 +1,5 @@
 // @ts-check
 import {Client} from './client/client.js';
-import * as Map from './map-data.js';
 
 /** 
  * objectName
@@ -35,7 +34,7 @@ addEventListener('load',
   () => {
     const mainNode = document.querySelector('main');
     if (!mainNode) return;
-    new Client(mainNode, Map.size, Map.data, Map.palette);
+    new Client(mainNode);
   }, {once : true}
 )
 oncontextmenu = e => e.preventDefault();

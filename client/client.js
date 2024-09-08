@@ -1,5 +1,6 @@
 // @ts-check
 import {Interaction} from './interaction.js';
+import * as Map from '../map-data.js';
 
 /**
  * vector2는 2차원 xy 화면상의 위치
@@ -18,13 +19,8 @@ import {Interaction} from './interaction.js';
 export class Client {
   /**
    * @param {HTMLElement} root
-   * @param {Number[]} mapSize
-   * @param {Number[]} mapData
-   * @param {Number[][]} mapPalette
    */
-  constructor(root, mapSize, mapData, mapPalette) {
-    const 시야거리 = 10, 이동력 = 10;
-
-    new Interaction(root, mapSize, mapData, mapPalette);
+  constructor(root) {
+    new Interaction(root, Map.size, Map.data, Map.palette);
   }
 }

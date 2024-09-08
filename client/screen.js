@@ -9,10 +9,11 @@ import {getLocationByVector} from '../functions/location.js';
 export class Screen {
   /**
    * @param {HTMLElement} root
-   * @param {(location: number[]) => Number[] | undefined} getRenderingDataByLocation
+   * @param {(location: number[]) => String | undefined} getRenderingDataByLocation
    * @param {(location: number[]) => void} triggerDataChangeByLocation
+   * @param {import("./renderer.js").Connection[]} connectionList
    */
-  constructor(root, getRenderingDataByLocation, triggerDataChangeByLocation) {
+  constructor(root, getRenderingDataByLocation, triggerDataChangeByLocation, connectionList) {
     let 화면위치 = [0,0], 격자크기 = [10,10];
 
     const canvas = root.appendChild(document.createElement('canvas'));
@@ -23,7 +24,7 @@ export class Screen {
     new Wheel(canvas, 화면위치, 격자크기);
     new MouseDown(canvas, 화면위치, 격자크기, triggerDataChangeByLocation);
     new ReSize(canvas);
-    new Renderer(ctx, 화면위치, 격자크기, getRenderingDataByLocation); // 렌더러의 출력 데이터도 여기를 통해서 연결하기?
+    new Renderer(ctx, 화면위치, 격자크기, getRenderingDataByLocation, connectionList); // 렌더러의 출력 데이터도 여기를 통해서 연결하기?
   }
 }
 
