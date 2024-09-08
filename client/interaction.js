@@ -25,7 +25,7 @@ export class Interaction {
 
       list = [],
       connectionList = [
-        new Connection('rgba(255,255,255)', 3, list)
+        new Connection('rgba(255,255,255)', 0.5, list)
       ];
 
     new KeyDown(지형선택);

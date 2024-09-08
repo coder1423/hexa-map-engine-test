@@ -31,8 +31,21 @@ export class Renderer {
         drawTile(ctx, drawingVector, padding격자크기, 격자크기[y]);
       }
 
-      for (const connection of connectionList) {
+      /** @type {(location: Number[]) => Number[]} */
+      const getPathVectorByLocation = location => Vector2.add([격자크기[x], 격자크기[y]*2], getDrawingVectorByLocation(location, 화면위치, 격자크기, 0));
 
+      for (const connection of connectionList) {
+        if (connection.path.length < 1) continue;
+        ctx.strokeStyle = connection.rgbaStr;
+        ctx.lineWidth   = connection.lineWidth * 격자크기[y];
+        let [px, py] = getPathVectorByLocation(connection.path[0]);
+        ctx.beginPath();
+        ctx.moveTo(px, py);
+        for (let i = 0; ++i < connection.path.length;) {
+          [px, py] = getPathVectorByLocation(connection.path[i]);
+          ctx.lineTo(px, py);
+        }
+        ctx.stroke();
       }
 
       requestAnimationFrame(performFrame);
@@ -93,7 +106,7 @@ function drawTile(ctx, [px, py], [dx, dy], 격자크기Y) {
     ctx.closePath();
     ctx.fill();
   } else {
-    ctx.fillRect(px, py+격자크기Y/2, dx*2, dy*3);
+    ctx.fillRect(px, py+격자크기Y*0.5, dx*2, dy*3);
   }
 }
 

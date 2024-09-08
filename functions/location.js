@@ -13,16 +13,6 @@ export function getLocationByVector(vector, divisor) {
   )
   return [ (location[x] - (location[y]&1))>>1, location[y] ];
 }
-/**
- * @param {Number[]} location
- * @param {Number[]} 격자크기
- */
-export function getVectorByLocation(location, 격자크기) {
-  return [
-    (location[x] + (location[y]&1)*0.5) * 격자크기[x],
-    location[y] * 격자크기[y]
-  ]
-}
 
 /**
  * @param {Number[]} location
