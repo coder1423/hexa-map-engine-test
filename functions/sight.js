@@ -2,12 +2,12 @@
 import * as Location from './location.js';
 
 /**
- * @param {Number} n
+ * @param {Number} 최대거리
  * @param {Number[]} 시작
  * @param {Number[]} max
  * @param {(index: Number) => Number} get높이by인덱스
  */
-export function getLocationsBySight(n, 시작, max, get높이by인덱스) {
+export function getLocationsBySight(최대거리, 시작, max, get높이by인덱스) {
   const 시작인덱스 = Location.getIndexByLocation(시작, max),
     보임집합 = new Set([시작인덱스]),
     가려짐지도 = [];
@@ -16,7 +16,7 @@ export function getLocationsBySight(n, 시작, max, get높이by인덱스) {
   가려짐지도[시작인덱스] = 시작높이;
 
   for (const 방향 of 직선방향들)
-  for (let 기존 = 시작, 기존인덱스 = 시작인덱스, i = n; i--;) {
+  for (let 기존 = 시작, 기존인덱스 = 시작인덱스, i = 최대거리; i--;) {
     const 대상 = Location.getLocationByRelativeLocation(기존, 방향),
       대상인덱스 = Location.getIndexByLocation(대상, max);
 
@@ -31,7 +31,7 @@ export function getLocationsBySight(n, 시작, max, get높이by인덱스) {
   }
 
   for (const {기준방향, 직선방향들} of 기준직선방향들)
-  for (let 이전기준 = 시작, i = n-2; 0 <= i; i -= 2) {
+  for (let 이전기준 = 시작, i = 최대거리; 0 <= (i -= 2);) {
     const 지금기준 = Location.getLocationByRelativeLocation(이전기준, 기준방향),
       기준인덱스 = Location.getIndexByLocation(지금기준, max);
 

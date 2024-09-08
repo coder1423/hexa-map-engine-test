@@ -1,26 +1,19 @@
 // @ts-check
+import * as Location from '../functions/location.js';
+import {Screen} from './screen.js';
 
 /**
- * @todo 여기는 그냥 모델이 아닌 뷰 모델로?
- * 뷰에서 클릭 등을 하면 이곳에서 전략패턴으로 상태에 따라서 선택들 조합?
- * 그리고 서버나 처리 모델 사이의 통신과 길찾기/직선/거리 등의 location 관련 기능들도 여기서 중심적으로 접근?
- * 
- * Screen이 뷰모델을 일방적으로 참조해서,
- * 클릭을 뷰모델의 타일선택 트리거 호출과 연결하고,
- * 뷰모델에 데이터 업데이트 콜백을 넣어서 draw 렌더링 연결하는 것 고려.
+ * 명령(서버에 요청할) 생성, 플레이어 선택, 키보드, 트리거, 길찾기와 자동명령(장거리 이동 등) 등 클라이언트 편의성 기능
  */
-
-import * as Location from './location.js';
-
-export class Model {
+export class Interaction {
   /**
+   * @param {HTMLElement} root
    * @param {Number[]} mapSize
    * @param {Number[]} mapData
-   * @param {Number[][]} mapPalette 
+   * @param {Number[][]} mapPalette
    */
-  constructor(mapSize, mapData, mapPalette) {
+  constructor(root, mapSize, mapData, mapPalette) {
     let 지형선택 = 0;
-    const 시야거리 = 10, 이동력 = 10;
     const 지형선택Map = new Map([
       ['Digit1', 1],
       ['Digit2', 2],
@@ -32,13 +25,15 @@ export class Model {
       ['Digit8', 8],
       ['Digit9', 9],
       ['Digit0', 0]
-    ])
+    ]);
     addEventListener('keydown', keydown);
+
+    new Screen(root, getRenderingDataByLocation, triggerDataChangeByLocation);
 
     /**
      * @param {Number[]} location
      */
-    this.getRenderingDataByLocation = location => {
+    function getRenderingDataByLocation(location) {
       const index = Location.getIndexByLocation(location, mapSize);
       if (index !== undefined) {
         return mapPalette[mapData[index]];
@@ -48,13 +43,13 @@ export class Model {
     /**
      * @param {Number[]} location
      */
-    this.triggerDataChangeByLocation = location => {
+    function triggerDataChangeByLocation(location) {
       const index = Location.getIndexByLocation(location, mapSize);
       if (index !== undefined) {
         mapData[index] = 지형선택;
       }
     }
-
+    
     /** @param {KeyboardEvent} e */
     function keydown(e) {
       const num = 지형선택Map.get(e.code);
@@ -62,6 +57,5 @@ export class Model {
         지형선택 = num;
       }
     }
-
   }
 }

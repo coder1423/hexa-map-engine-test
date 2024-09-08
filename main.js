@@ -1,28 +1,16 @@
 // @ts-check
-import {Screen} from './screen.js';
-import {Model} from './model.js';
+import {Client} from './client/client.js';
 import * as Map from './map-data.js';
+
+/**
+ * 브라우져 전역 데이터
+ */
 
 addEventListener('load',
   () => {
     const mainNode = document.querySelector('main');
     if (!mainNode) return;
-    const model = new Model(Map.size, Map.data, Map.palette);
-    new Screen(mainNode, model.getRenderingDataByLocation, model.triggerDataChangeByLocation);
+    new Client(mainNode, Map.size, Map.data, Map.palette);
   }, {once : true}
 )
 oncontextmenu = e => e.preventDefault();
-
-
-class State {
-  /**
-   * @param {State} rootState
-   */
-  constructor(rootState) {
-    const rootNode = rootState.slot;
-    this.slot = null;
-  }
-  remove() {
-
-  }
-}

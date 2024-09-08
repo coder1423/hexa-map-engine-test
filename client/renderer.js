@@ -1,8 +1,11 @@
 // @ts-check
-import * as Vector2 from './vector2.js';
+import * as Vector2 from '../functions/vector2.js';
 
 const [x, y] = [0, 1];
 
+/**
+ * requestAnimationFrame
+ */
 export class Renderer {
   /**
    * @param {CanvasRenderingContext2D} ctx
