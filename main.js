@@ -27,9 +27,21 @@ import {Client} from './client/client.js';
  */
 
 /**
- * 브라우져 전역 데이터
+ * function  : 전역순수함수, 클로저내부메서드
+ * =>        : 동적생성함수
+ * class     : 클로저, 구조체, 자료구조
+ * function* : 반복자
  */
 
+/**
+ * vector2는 2차원 xy 화면상의 위치
+ * location은 타일상의 xy 위치
+ * index는 타일의 배열상의 실제위치
+ */
+
+/**
+ * 브라우져 전역 데이터
+ */
 addEventListener('load',
   () => {
     const mainNode = document.querySelector('main');

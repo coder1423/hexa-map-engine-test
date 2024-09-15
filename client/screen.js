@@ -24,7 +24,7 @@ export class Screen {
     new Wheel(canvas, 화면위치, 격자크기);
     new MouseDown(canvas, 화면위치, 격자크기, triggerDataChangeByLocation);
     new ReSize(canvas);
-    new Renderer(ctx, 화면위치, 격자크기, getRenderingDataByLocation, connectionList); // 렌더러의 출력 데이터도 여기를 통해서 연결하기?
+    new Renderer(ctx, 화면위치, 격자크기, getRenderingDataByLocation, connectionList);
   }
 }
 
