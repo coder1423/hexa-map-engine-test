@@ -16,42 +16,86 @@ export class Renderer {
    * @param {Connection[]} connectionList
    */
   constructor(ctx, 화면위치, 격자크기, getRenderingDataByLocation, connectionList) {
-    const performFrame = () => {
-      const 화면크기 = [ctx.canvas.width, ctx.canvas.height];
-      const padding = 격자크기[y] / 40, padding격자크기 = Vector2.add(격자크기, [-padding,-padding]);
-      ctx.clearRect(0,0, 화면크기[x], 화면크기[y]);
+    performFrame();
 
-      for (const location of 출력위치(화면위치, 격자크기, 화면크기)) {
+    function performFrame() {
+      const 격자배율 = 격자크기[y]; // 격자크기[y] = 격자배율 / 2
+      ctx.clearRect(0,0, ctx.canvas.width, ctx.canvas.height);
+
+      const padding = 격자배율 / 40,
+        타일기준 = Vector2.add(화면위치, [padding, padding]),
+        paddedTileSize = Vector2.add(격자크기, [-padding,-padding]);
+      for (const location of 출력위치()) {
         const color = getRenderingDataByLocation(location);
         if (color === undefined) continue;
         ctx.fillStyle = color;
 
-        const drawingVector = getDrawingVectorByLocation(location, 화면위치, 격자크기, padding);
-
-        drawTile(ctx, drawingVector, padding격자크기, 격자크기[y]);
+        const drawingVector = getDrawingVectorByLocation(타일기준, location);
+        if (격자배율 > 5) {
+          drawTile(drawingVector, paddedTileSize);
+        } else {
+          ctx.fillRect(drawingVector[x], drawingVector[y]+격자배율*0.5, paddedTileSize[x]*2, paddedTileSize[y]*3);
+        }
       }
 
-      /** @type {(location: Number[]) => Number[]} */
-      const getPathVectorByLocation = location => Vector2.add([격자크기[x], 격자크기[y]*2], getDrawingVectorByLocation(location, 화면위치, 격자크기, 0));
-
-      for (const connection of connectionList) {
-        if (connection.path.length < 1) continue;
-        ctx.strokeStyle = connection.rgbaStr;
-        ctx.lineWidth   = connection.lineWidth * 격자크기[y];
-        let [px, py] = getPathVectorByLocation(connection.path[0]);
-        ctx.beginPath();
-        ctx.moveTo(px, py);
-        for (let i = 0; ++i < connection.path.length;) {
-          [px, py] = getPathVectorByLocation(connection.path[i]);
-          ctx.lineTo(px, py);
+      if (격자배율 > 5) {
+        const 경로기준 = Vector2.add(화면위치, [격자크기[x], 격자크기[y]*2]);
+        for (const connection of connectionList) {
+          if (connection.path.length < 1) continue;
+          ctx.strokeStyle = connection.rgbaStr;
+          ctx.lineWidth   = connection.lineWidth * 격자배율;
+          let [px, py] = getDrawingVectorByLocation(경로기준, connection.path[0]);
+          ctx.beginPath();
+          ctx.moveTo(px, py);
+          for (let i = 0; ++i < connection.path.length;) {
+            [px, py] = getDrawingVectorByLocation(경로기준, connection.path[i]);
+            ctx.lineTo(px, py);
+          }
+          ctx.stroke();
         }
-        ctx.stroke();
       }
 
       requestAnimationFrame(performFrame);
     }
 
-    performFrame();
+    /**
+     * @param {Number[]} reference
+     * @param {Number[]} tileSize
+     */
+    function drawTile(reference, tileSize) {
+      ctx.beginPath();
+        ctx.moveTo(reference[x]              ,reference[y]+tileSize[y]  );
+        ctx.lineTo(reference[x]+tileSize[x]  ,reference[y]              );
+        ctx.lineTo(reference[x]+tileSize[x]*2,reference[y]+tileSize[y]  );
+        ctx.lineTo(reference[x]+tileSize[x]*2,reference[y]+tileSize[y]*3);
+        ctx.lineTo(reference[x]+tileSize[x]  ,reference[y]+tileSize[y]*4);
+        ctx.lineTo(reference[x]              ,reference[y]+tileSize[y]*3);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function* 출력위치() {
+      const 타일크기 = [격자크기[x]*2, 격자크기[y]*3],
+        시작 = Vector2.divfloor(Vector2.scalarMul(화면위치, -1), 타일크기),
+        반복횟수 = Vector2.divfloor([ctx.canvas.width, ctx.canvas.height], 타일크기);
+
+      for (let iy = 반복횟수[y]+3; iy--;)
+      for (let ix = 반복횟수[x]+3; ix--;) {
+        yield Vector2.add(시작, [ix-1, iy-1]);
+      }
+    }
+
+    /**
+     * @param {Number[]} reference
+     * @param {Number[]} location
+     */
+    function getDrawingVectorByLocation(reference, location) {
+      return [
+        reference[x] + location[x]*격자크기[x]*2 + (location[y] & 1)*격자크기[x],
+        reference[y] + location[y]*격자크기[y]*3
+      ]
+    }
+
   }
 }
 
@@ -89,57 +133,6 @@ export class Connection {
 }
 
 /**
- * @param {CanvasRenderingContext2D} ctx
- * @param {Number[]} drawingVector
- * @param {Number[]} 격자크기
- * @param {Number} 격자크기Y
- */
-function drawTile(ctx, [px, py], [dx, dy], 격자크기Y) {
-  if (격자크기Y > 5) {
-    ctx.beginPath();
-      ctx.moveTo(px     ,py+dy  );
-      ctx.lineTo(px+dx  ,py     );
-      ctx.lineTo(px+dx*2,py+dy  );
-      ctx.lineTo(px+dx*2,py+dy*3);
-      ctx.lineTo(px+dx  ,py+dy*4);
-      ctx.lineTo(px     ,py+dy*3);
-    ctx.closePath();
-    ctx.fill();
-  } else {
-    ctx.fillRect(px, py+격자크기Y*0.5, dx*2, dy*3);
-  }
-}
-
-/**
- * @param {Number[]} 화면위치
- * @param {Number[]} 격자크기
- * @param {Number[]} 화면크기
- */
-function* 출력위치(화면위치, 격자크기, 화면크기) {
-  const 타일크기 = [격자크기[x]*2, 격자크기[y]*3],
-    시작 = Vector2.divfloor(Vector2.scalarMul(화면위치, -1), 타일크기),
-    반복횟수 = Vector2.divfloor(화면크기, 타일크기);
-
-  for (let iy = 반복횟수[y]+3; iy--;)
-  for (let ix = 반복횟수[x]+3; ix--;) {
-    yield Vector2.add(시작, [ix-1, iy-1]);
-  }
-}
-
-/**
- * @param {Number[]} location
- * @param {Number[]} 화면위치
- * @param {Number[]} 격자크기
- * @param {Number} padding
- */
-function getDrawingVectorByLocation(location, 화면위치, 격자크기, padding) {
-  return [
-    화면위치[x] + padding + location[x]*격자크기[x]*2 + (location[y] & 1)*격자크기[x],
-    화면위치[y] + padding + location[y]*격자크기[y]*3
-  ]
-}
-
-/**
  * @param {Number[]} max
  * @param {Number[][]} palette
  * @param {Number[]} data
@@ -161,6 +154,7 @@ export function createGetRenderingDataByLocation(max, palette, data, overlayList
     return getStrByRGB(rgb);
   }
 }
+
 /** @param {Number[]} rgb */
 function getStrByRGB(rgb) {
   return `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
