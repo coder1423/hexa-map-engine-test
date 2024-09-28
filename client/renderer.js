@@ -31,14 +31,14 @@ export class Renderer {
         ctx.fillStyle = color;
 
         const drawingVector = getDrawingVectorByLocation(타일기준, location);
-        if (격자배율 > 5) {
+        if (격자배율 > 9) {
           drawTile(drawingVector, paddedTileSize);
         } else {
           ctx.fillRect(drawingVector[x], drawingVector[y]+격자배율*0.5, paddedTileSize[x]*2, paddedTileSize[y]*3);
         }
       }
 
-      if (격자배율 > 5) {
+      if (격자배율 > 9) {
         const 경로기준 = Vector2.add(화면위치, [격자크기[x], 격자크기[y]*2]);
         for (const connection of connectionList) {
           if (connection.path.length < 1) continue;

@@ -51,8 +51,8 @@ class Wheel {
    * @param {Number[]} 격자크기
    */
   constructor(node, 화면위치, 격자크기) {
-    const mulWheel = 0.03, min = 5, max = 50, 격자비율 = [3**0.5/2, 1/2];
-    let 격자배율 = 15;
+    const mulWheel = 0.04, min = 5, max = 50, 격자비율 = [3**0.5/2, 1/2];
+    let 격자배율 = 25;
     updateTileSize(격자배율);
     node.addEventListener('wheel', wheel);
 
@@ -115,14 +115,17 @@ class MouseWheelMove {
   constructor(node, 화면위치, 클릭위치) {
     const reference = Vector2.difference(화면위치, 클릭위치);
     node.addEventListener('mousemove', mousemove);
-    addEventListener('mouseup', mouseup, {once : true});
+    addEventListener('mouseup', mouseup);
 
     /** @param {MouseEvent} e */
     function mousemove(e) {
       Vector2.update(화면위치, Vector2.difference(reference, [e.offsetX, e.offsetY]));
     }
-    function mouseup() {
+    /** @param {MouseEvent} e */
+    function mouseup(e) {
+      if (e.button != 1) return;
       node.removeEventListener('mousemove', mousemove);
+      removeEventListener('mousemove', mouseup);
     }
 
   }
@@ -136,14 +139,17 @@ class MouseRightMove {
    */
   constructor(node, getLocationByOffsetVector, triggerDataChangeByLocation) {
     node.addEventListener('mousemove', mousemove);
-    addEventListener('mouseup', mouseup, {once : true});
+    addEventListener('mouseup', mouseup);
 
     /** @param {MouseEvent} e */
     function mousemove(e) {
       triggerDataChangeByLocation(getLocationByOffsetVector([e.offsetX, e.offsetY]));
     }
-    function mouseup() {
+    /** @param {MouseEvent} e */
+    function mouseup(e) {
+      if (e.button != 2) return;
       node.removeEventListener('mousemove', mousemove);
+      removeEventListener('mousemove', mouseup);
     }
 
   }
