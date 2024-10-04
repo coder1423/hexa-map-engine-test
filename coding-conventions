@@ -1,6 +1,3 @@
-// @ts-check
-import {Client} from './client/client.js';
-
 /** 
  * objectName
  * ClassName
@@ -38,15 +35,3 @@ import {Client} from './client/client.js';
  * location은 타일상의 xy 위치
  * index는 타일의 배열상의 실제위치
  */
-
-/**
- * 브라우져 전역 데이터
- */
-addEventListener('load',
-  () => {
-    const mainNode = document.querySelector('main');
-    if (!mainNode) return;
-    new Client(mainNode);
-  }, {once : true}
-)
-oncontextmenu = e => e.preventDefault();
