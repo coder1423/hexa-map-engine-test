@@ -4,43 +4,42 @@ import * as Vector2 from '../functions/vector2.js';
 import {getLocationByVector} from '../functions/location.js';
 
 /**
- * 화면위치, 격자크기, html캔버스
+ * 캔버스 내부 기능. 화면위치, 격자크기
  */
 export class Screen {
   /**
-   * @param {HTMLElement} root
+   * @param {HTMLCanvasElement} canvas
+   * @param {Number[]} mouseLocation
    * @param {(location: number[]) => String | undefined} getRenderingDataByLocation
-   * @param {(location: number[]) => void} triggerDataChangeByLocation
    * @param {import("./renderer.js").Connection[]} connectionList
    */
-  constructor(root, getRenderingDataByLocation, triggerDataChangeByLocation, connectionList) {
+  constructor(canvas, mouseLocation, getRenderingDataByLocation, connectionList) {
     let 화면위치 = [0,0], 격자크기 = [10,10];
 
-    const canvas = root.appendChild(document.createElement('canvas'));
-    canvas.classList.add('layer');
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
     new Wheel(canvas, 화면위치, 격자크기);
-    new MouseDown(canvas, 화면위치, 격자크기, triggerDataChangeByLocation);
-    new ReSize(canvas);
+    new MouseMove(canvas, 화면위치, 격자크기, mouseLocation);
+    new MouseWheelDown(canvas, 화면위치);
     new Renderer(ctx, 화면위치, 격자크기, getRenderingDataByLocation, connectionList);
   }
 }
 
-class ReSize {
+class MouseMove {
   /**
-   * @param {HTMLCanvasElement} canvas
+   * @param {HTMLElement} node
+   * @param {Number[]} 화면위치
+   * @param {Number[]} 격자크기
+   * @param {Number[]} mouseLocation
    */
-  constructor(canvas) {
-    resize();
-    addEventListener('resize', resize);
+  constructor(node, 화면위치, 격자크기, mouseLocation) {
+    node.addEventListener('mousemove', mousemove);
 
-    function resize() {
-      canvas.width  = innerWidth;
-      canvas.height = innerHeight;
+    /** @param {MouseEvent} e */
+    function mousemove(e) {
+      Vector2.update(mouseLocation, getLocationByVector(Vector2.difference(화면위치, [e.offsetX, e.offsetY]), 격자크기));
     }
-
   }
 }
 
@@ -76,30 +75,18 @@ class Wheel {
   }
 }
 
-class MouseDown {
+class MouseWheelDown {
   /**
    * @param {HTMLElement} node
    * @param {Number[]} 화면위치
-   * @param {Number[]} 격자크기
-   * @param {(location: number[]) => void} triggerDataChangeByLocation
    */
-  constructor(node, 화면위치, 격자크기, triggerDataChangeByLocation) {
-    /** @param {Number[]} 마우스위치 */
-    const getLocationByOffsetVector = 마우스위치 => getLocationByVector(Vector2.difference(화면위치, 마우스위치), 격자크기);
+  constructor(node, 화면위치) {
     node.addEventListener('mousedown', mousedown);
 
     /** @param {MouseEvent} e */
     function mousedown(e) {
-      switch (e.button) {
-        case 1: // 휠클릭
-          new MouseWheelMove(node, 화면위치, [e.offsetX, e.offsetY]);
-          break;
-        case 0: // 좌클릭
-          console.log(getLocationByOffsetVector([e.offsetX, e.offsetY]));
-          break;
-        case 2: // 우클릭
-          new MouseRightMove(node, getLocationByOffsetVector, triggerDataChangeByLocation);
-          break;
+      if (e.button == 1) {
+        new MouseWheelMove(node, 화면위치, [e.offsetX, e.offsetY]);
       }
     }
 
@@ -124,30 +111,6 @@ class MouseWheelMove {
     /** @param {MouseEvent} e */
     function mouseup(e) {
       if (e.button != 1) return;
-      node.removeEventListener('mousemove', mousemove);
-      removeEventListener('mousemove', mouseup);
-    }
-
-  }
-}
-
-class MouseRightMove {
-  /**
-   * @param {HTMLElement} node
-   * @param {(마우스위치: number[]) => number[]} getLocationByOffsetVector
-   * @param {(location: number[]) => void} triggerDataChangeByLocation
-   */
-  constructor(node, getLocationByOffsetVector, triggerDataChangeByLocation) {
-    node.addEventListener('mousemove', mousemove);
-    addEventListener('mouseup', mouseup);
-
-    /** @param {MouseEvent} e */
-    function mousemove(e) {
-      triggerDataChangeByLocation(getLocationByOffsetVector([e.offsetX, e.offsetY]));
-    }
-    /** @param {MouseEvent} e */
-    function mouseup(e) {
-      if (e.button != 2) return;
       node.removeEventListener('mousemove', mousemove);
       removeEventListener('mousemove', mouseup);
     }
