@@ -2,7 +2,7 @@
 
 export const size = [128, 128];
 /** @type {Number[]} */
-export const data = new Array(size[0] * size[1]).fill(0);
+export const data = new Array(size[0] * size[1]).fill(1);
 
 const [시작, 끝] = [[245, 245, 220], [58-20*2, 100-16*2, 75-16*2]],
   간격 = 시작.map( (val, i) => (val - 끝[i]) / 9 >>> 0 );

@@ -18,9 +18,9 @@ export class PriorityQueue {
 
     this[Symbol.iterator] = function*() {
       for (
-        let elem = values.pop();
+        let elem = values.shift();
         elem !== undefined;
-        elem = values.pop()
+        elem = values.shift()
       ) yield elem;
     }
   }
