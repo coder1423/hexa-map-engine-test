@@ -18,9 +18,10 @@
  * 
  * handle  : 이벤트 처리
  * set     : 값 설정
- * update  : 상태 변경
+ * update  : 상태 갱신
  * clear   : 지우기
  * perform : 작업 수행
+ * change  : 상태 변경
  */
 
 /**

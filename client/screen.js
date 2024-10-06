@@ -11,7 +11,7 @@ export class Screen {
    * @param {HTMLCanvasElement} canvas
    * @param {Number[]} mouseLocation
    * @param {(location: number[]) => String | undefined} getRenderingDataByLocation
-   * @param {import("./renderer.js").Connection[]} connectionList
+   * @param {import('./renderer.js').Connection[]} connectionList
    */
   constructor(canvas, mouseLocation, getRenderingDataByLocation, connectionList) {
     let 화면위치 = [0,0], 격자크기 = [10,10];
@@ -20,26 +20,24 @@ export class Screen {
     if (!ctx) return;
 
     new Wheel(canvas, 화면위치, 격자크기);
-    new MouseMove(canvas, 화면위치, 격자크기, mouseLocation);
-    new MouseWheelDown(canvas, 화면위치);
+    canvas.addEventListener('mousedown', mousedown);
+    canvas.addEventListener('mousemove', mousemove);
     new Renderer(ctx, 화면위치, 격자크기, getRenderingDataByLocation, connectionList);
-  }
-}
 
-class MouseMove {
-  /**
-   * @param {HTMLElement} node
-   * @param {Number[]} 화면위치
-   * @param {Number[]} 격자크기
-   * @param {Number[]} mouseLocation
-   */
-  constructor(node, 화면위치, 격자크기, mouseLocation) {
-    node.addEventListener('mousemove', mousemove);
+
+
+    /** @param {MouseEvent} e */
+    function mousedown(e) {
+      if (e.button == 1) {
+        new MouseWheelMove(canvas, 화면위치, [e.offsetX, e.offsetY]);
+      }
+    }
 
     /** @param {MouseEvent} e */
     function mousemove(e) {
       Vector2.update(mouseLocation, getLocationByVector(Vector2.difference(화면위치, [e.offsetX, e.offsetY]), 격자크기));
     }
+
   }
 }
 
@@ -70,24 +68,6 @@ class Wheel {
         Vector2.scalarMul([e.offsetX, e.offsetY], 1-격자배율/기존격자배율),
         Vector2.scalarMul(화면위치, 격자배율/기존격자배율)
       ))
-    }
-
-  }
-}
-
-class MouseWheelDown {
-  /**
-   * @param {HTMLElement} node
-   * @param {Number[]} 화면위치
-   */
-  constructor(node, 화면위치) {
-    node.addEventListener('mousedown', mousedown);
-
-    /** @param {MouseEvent} e */
-    function mousedown(e) {
-      if (e.button == 1) {
-        new MouseWheelMove(node, 화면위치, [e.offsetX, e.offsetY]);
-      }
     }
 
   }
