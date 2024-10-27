@@ -13,8 +13,8 @@ export class Interaction {
    * @param {HTMLElement} root
    * @param {HTMLCanvasElement} screen
    * @param {number[]} mouseLocation
-   * @param {import("../screen/renderer.js").Overlay[]} overlayList
-   * @param {import("../screen/renderer.js").Connection[]} connectionList
+   * @param {import('../screen/structure.js').Overlay[]} overlayList
+   * @param {import('../screen/structure.js').Connection[]} connectionList
    * @param {Number[]} mapSize
    * @param {Number[]} mapData
    */
@@ -36,9 +36,10 @@ export class Interaction {
     /** @param {MouseEvent} e */
     function canvasMousedown(e) {
       if (e.button == 2) {
-        new ChangeMapData(screen, mouseLocation, 지형선택, mapSize, mapData);
+        new UpdateMapData(screen, mouseLocation, 지형선택, mapSize, mapData);
       }
     }
+
 
 
     function resize() {
@@ -47,10 +48,13 @@ export class Interaction {
     }
 
 
+
   }
 }
 
-class ChangeMapData {
+
+
+class UpdateMapData {
   /**
    * @param {HTMLElement} node
    * @param {number[]} mouseLocation
@@ -72,6 +76,7 @@ class ChangeMapData {
     }
 
 
+
     /** @param {MouseEvent} e */
     function mouseup(e) {
       if (e.button != 2) return;
@@ -80,8 +85,11 @@ class ChangeMapData {
     }
 
 
+
   }
 }
+
+
 
 class KeyDown {
   /**
@@ -111,6 +119,7 @@ class KeyDown {
         지형선택[0] = num;
       }
     }
+
 
 
   }

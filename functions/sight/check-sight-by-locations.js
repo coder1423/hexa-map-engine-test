@@ -15,14 +15,16 @@ export function checkSightByLocations(reference, target, max, 지형높이, 지�
 
   const relativeLocation = Location.getRelativeLocationByLocations(reference, target),
     referenceDistance = Location.getDistanceByRelativeLocation(relativeLocation),
-    reference높이 = 지형높이[지형지도[referenceIndex]],
-    /** @type {(location: Number[], distance: Number) => Number | undefined} */
-    getSlopeByLocation = (location, distance) => {
-      const index = Location.getIndexByLocation(location, max);
-      if (index === undefined) return;
-      return (지형높이[지형지도[index]] - reference높이) / distance;
-    },
-    referenceSlope = getSlopeByLocation(target, referenceDistance);
+    reference높이 = 지형높이[지형지도[referenceIndex]];
+
+  /** @type {(location: Number[], distance: Number) => Number | undefined} */
+  const getSlopeByLocation = (location, distance) => {
+    const index = Location.getIndexByLocation(location, max);
+    if (index === undefined) return;
+    return (지형높이[지형지도[index]] - reference높이) / distance;
+  }
+
+  const referenceSlope = getSlopeByLocation(target, referenceDistance);
   if (referenceSlope === undefined) return;
 
   /** @type {(location: Number[], distance: Number) => Boolean} 참이면 가려진것 */
@@ -33,6 +35,8 @@ export function checkSightByLocations(reference, target, max, 지형높이, 지�
 
   return checkSight(reference, relativeLocation, isObstructingByLocation);
 }
+
+
 
 /**
  * @param {Number[]} reference
@@ -52,6 +56,7 @@ function checkSight(reference, [x, y], isObstructingByLocation) {
     getKeyByLocation([x, y])
   );
 }
+
 /**
  * @param {Number[]} reference
  * @param {(location: Number[], distance: Number) => Boolean} isObstructingByLocation
@@ -80,6 +85,8 @@ function 사분면(reference, isObstructingByLocation, [x, y], key) {
   );
 }
 
+
+
 /**
  * @param {Number[]} location
  * @param {(location: Number[], distance: Number) => Boolean} isObstructingByLocation
@@ -95,6 +102,8 @@ function 직선(location, isObstructingByLocation, direction, count) {
 
   return true;
 }
+
+
 
 /**
  * @param {Number[]} location
@@ -131,6 +140,8 @@ function 대각직선(location, isObstructingByLocation, direction, count) {
   return true;
 }
 
+
+
 /**
  * @param {Number[]} location
  * @param {(location: Number[], distance: Number) => Boolean} isObstructingByLocation
@@ -156,6 +167,8 @@ function 측면(location, isObstructingByLocation, [직선Direction, 측면Direc
 
   return true;
 }
+
+
 
 /** @param {Number[]} location */
 function get규격LocationByLocation([x, y]) {

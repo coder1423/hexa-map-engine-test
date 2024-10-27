@@ -17,9 +17,10 @@ import * as Location from '../location.js';
  * @param {(index: Number) => Number} get높이ByIndex
  */
 export function getLocationsBySight(maxDistance, start, max, get높이ByIndex) {
-  const startIndex = Location.getIndexByLocation(start, max),
-    visibleSet = new Set([startIndex]),
-    obscured지도 = [];
+  const startIndex = Location.getIndexByLocation(start, max);
+  const visibleSet = new Set([startIndex]);
+  const obscured지도 = [];
+
   if (startIndex === undefined) return visibleSet;
   const start높이 = get높이ByIndex(startIndex);
   obscured지도[startIndex] = start높이;
@@ -31,8 +32,8 @@ export function getLocationsBySight(maxDistance, start, max, get높이ByIndex) {
     if (targetIndex === undefined) break;
   
     // 추가
-    const obscured = obscured지도[previousIndex],
-      높이 = get높이ByIndex(targetIndex);
+    const obscured = obscured지도[previousIndex];
+    const 높이 = get높이ByIndex(targetIndex);
     if (obscured <= 높이) visibleSet.add(targetIndex);
     obscured지도[targetIndex] = Math.max(높이, obscured);
 
@@ -69,8 +70,8 @@ export function getLocationsBySight(maxDistance, start, max, get높이ByIndex) {
       if (targetIndex === undefined || comparisonIndex === undefined) break;
 
       // 추가
-      const obscured = Math.max(obscured지도[previousIndex], obscured지도[comparisonIndex]),
-        높이 = get높이ByIndex(targetIndex);
+      const obscured = Math.max(obscured지도[previousIndex], obscured지도[comparisonIndex]);
+      const 높이 = get높이ByIndex(targetIndex);
       if (obscured <= 높이) visibleSet.add(targetIndex);
       obscured지도[targetIndex] = Math.max(높이, obscured);
 

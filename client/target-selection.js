@@ -1,9 +1,11 @@
 // @ts-check
 import * as Location from '../functions/location.js';
-import {Overlay, Connection} from './renderer.js';
+import {Overlay, Connection} from '../screen/structure.js';
 import {getLocationsBySight} from '../functions/sight/get-locations-by-sight.js';
 import {getPathtreeAndNodesetByPathfinding} from '../functions/pathfinding/get-pathtree-and-nodeset-by-pathfinding.js';
 import {getPathByPathtree} from '../functions/pathfinding/get-path-by-pathtree.js';
+
+
 
 /**
  * @todo 선택 대상을 어떻게 상호작용의 다른 기능들과 공유할지 생각하기.
@@ -18,9 +20,9 @@ export class TargetSelection {
    * @param {Number[]} mapData
    */
   constructor(node, mouseLocation, overlayList, connectionList, mapSize, mapData) {
-    const visibleSet = new Set(),
-      이동가능Set = new Set(),
-      pathList = [];
+    const visibleSet = new Set();
+    const 이동가능Set = new Set();
+    const pathList = [];
 
     overlayList.push(...[
       new Overlay([0,0,255], 이동가능Set, 0.25),

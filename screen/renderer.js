@@ -1,6 +1,5 @@
 // @ts-check
 import * as Vector2 from '../functions/vector2.js';
-import {getIndexByLocation} from '../functions/location.js';
 
 const [x, y] = [0, 1];
 
@@ -15,7 +14,7 @@ export class Renderer {
    * @param {Number[]} 화면위치
    * @param {Number[]} 격자크기
    * @param {(location: number[]) => String | undefined} getRenderingDataByLocation
-   * @param {Connection[]} connectionList
+   * @param {import('./structure.js').Connection[]} connectionList
    */
   constructor(ctx, 화면위치, 격자크기, getRenderingDataByLocation, connectionList) {
     performFrame();
@@ -109,81 +108,4 @@ export class Renderer {
 
 
   }
-}
-
-
-
-export class Overlay {
-  /**
-   * @param {Number[]} rgb
-   * @param {Set<Number>} indexSet
-   * @param {Number} alpha 0~1
-   */
-  constructor(
-    rgb,
-    indexSet,
-    alpha
-  ) {
-    this.rgb      = rgb,
-    this.indexSet = indexSet,
-    this.alpha    = alpha
-  }
-}
-export class Connection {
-  /**
-   * @param {String} rgbaStr
-   * @param {Number} lineWidth
-   * @param {Number[][]} path location[][]
-   */
-  constructor(
-    rgbaStr,
-    lineWidth,
-    path
-  ) {
-    this.rgbaStr   = rgbaStr,
-    this.lineWidth = lineWidth,
-    this.path      = path
-  }
-}
-
-
-
-/**
- * @param {Number[]} max
- * @param {Number[][]} palette
- * @param {Number[]} data
- * @param {Overlay[]} overlayList
- */
-export function createGetRenderingDataByLocation(max, palette, data, overlayList) {
-  /** @param {Number[]} location*/
-  return location => {
-    const index = getIndexByLocation(location, max);
-    if (index === undefined) return;
-    let rgb = palette[data[index]];
-
-    for (const overlay of overlayList) {
-      if (overlay.indexSet.has(index)) {
-        rgb = mixRGBs(rgb, overlay.rgb, overlay.alpha);
-      }
-    }
-
-    return getStrByRGB(rgb);
-  }
-}
-
-/** @param {Number[]} rgb */
-function getStrByRGB(rgb) {
-  return `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
-}
-/**
- * @param {Number[]} baseRgb
- * @param {Number[]} rgb
- * @param {Number} alpha 0~1
-*/
-function mixRGBs(baseRgb, rgb, alpha) {
-  return [
-    baseRgb[0] + (rgb[0]-baseRgb[0])*alpha,
-    baseRgb[1] + (rgb[1]-baseRgb[1])*alpha,
-    baseRgb[2] + (rgb[2]-baseRgb[2])*alpha
-  ]
 }

@@ -77,8 +77,8 @@ export function hypotenuse(vector2) {
 
 /**
  * @param {Number[]} existing
- * @param {Number[]} updated
+ * @param {Number[]} changed
  */
-export function update(existing, updated) {
-  [existing[x], existing[y]] = updated;
+export function change(existing, changed) {
+  [existing[x], existing[y]] = changed;
 }

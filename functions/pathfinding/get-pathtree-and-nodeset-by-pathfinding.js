@@ -8,12 +8,12 @@ import {PriorityQueue} from '../priority-queue.js';
  * @param {Number} initialNode
  */
 export function getPathtreeAndNodesetByPathfinding(calcCost, getAround, initialValue, initialNode) {
-  const nodeSet = new Set([initialNode]),
-    /** @type {Number[]} */
-    tree = [],
-    /** @type {Number[]} */
-    map  = [],
-    heap = new PriorityQueue((a, b) => map[b] - map[a], [initialNode]);
+  const nodeSet = new Set([initialNode]);
+  /** @type {Number[]} */
+  const tree = [];
+  /** @type {Number[]} */
+  const map  = [];
+  const heap = new PriorityQueue((a, b) => map[b] - map[a], [initialNode]);
   map[initialNode] = initialValue;
 
   for (const referenceNode of heap) {

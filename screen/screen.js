@@ -13,7 +13,7 @@ export class Screen {
    * @param {HTMLCanvasElement} canvas
    * @param {Number[]} mouseLocation
    * @param {(location: number[]) => String | undefined} getRenderingDataByLocation
-   * @param {import('./renderer.js').Connection[]} connectionList
+   * @param {import('./structure.js').Connection[]} connectionList
    */
   constructor(canvas, mouseLocation, getRenderingDataByLocation, connectionList) {
     let 화면위치 = [0,0], 격자크기 = [10,10];
@@ -39,7 +39,7 @@ export class Screen {
 
     /** @param {MouseEvent} e */
     function mousemove(e) {
-      Vector2.update(mouseLocation, getLocationByVector(Vector2.difference(화면위치, [e.offsetX, e.offsetY]), 격자크기));
+      Vector2.change(mouseLocation, getLocationByVector(Vector2.difference(화면위치, [e.offsetX, e.offsetY]), 격자크기));
     }
 
 
@@ -58,14 +58,14 @@ class Wheel {
   constructor(node, 화면위치, 격자크기) {
     const mulWheel = 0.04, min = 5, max = 50, 격자비율 = [3**0.5/2, 1/2];
     let 격자배율 = 25;
-    updateTileSize(격자배율);
+    changeTileSize(격자배율);
     node.addEventListener('wheel', wheel);
 
 
 
     /** @param {Number} size */
-    function updateTileSize(size) {
-      Vector2.update(격자크기, Vector2.scalarMul(격자비율, size));
+    function changeTileSize(size) {
+      Vector2.change(격자크기, Vector2.scalarMul(격자비율, size));
     }
 
 
@@ -74,9 +74,9 @@ class Wheel {
     function wheel(e) {
       const 기존격자배율 = 격자배율;
       격자배율 = limitedToRange(격자배율-e.deltaY*mulWheel, min, max);
-      updateTileSize(격자배율);
+      changeTileSize(격자배율);
 
-      Vector2.update(화면위치, Vector2.add(
+      Vector2.change(화면위치, Vector2.add(
         Vector2.scalarMul([e.offsetX, e.offsetY], 1-격자배율/기존격자배율),
         Vector2.scalarMul(화면위치, 격자배율/기존격자배율)
       ))
@@ -104,7 +104,7 @@ class MouseWheelMove {
 
     /** @param {MouseEvent} e */
     function mousemove(e) {
-      Vector2.update(화면위치, Vector2.difference(reference, [e.offsetX, e.offsetY]));
+      Vector2.change(화면위치, Vector2.difference(reference, [e.offsetX, e.offsetY]));
     }
 
 
