@@ -3,6 +3,8 @@ import {Renderer} from './renderer.js';
 import * as Vector2 from '../functions/vector2.js';
 import {getLocationByVector} from '../functions/location.js';
 
+
+
 /**
  * 캔버스 내부 기능. 화면위치, 격자크기
  */
@@ -33,13 +35,19 @@ export class Screen {
       }
     }
 
+
+
     /** @param {MouseEvent} e */
     function mousemove(e) {
       Vector2.update(mouseLocation, getLocationByVector(Vector2.difference(화면위치, [e.offsetX, e.offsetY]), 격자크기));
     }
 
+
+
   }
 }
+
+
 
 class Wheel {
   /**
@@ -53,10 +61,14 @@ class Wheel {
     updateTileSize(격자배율);
     node.addEventListener('wheel', wheel);
 
+
+
     /** @param {Number} size */
     function updateTileSize(size) {
       Vector2.update(격자크기, Vector2.scalarMul(격자비율, size));
     }
+
+
 
     /** @param {WheelEvent} e */
     function wheel(e) {
@@ -70,8 +82,12 @@ class Wheel {
       ))
     }
 
+
+
   }
 }
+
+
 
 class MouseWheelMove {
   /**
@@ -84,10 +100,15 @@ class MouseWheelMove {
     node.addEventListener('mousemove', mousemove);
     addEventListener('mouseup', mouseup);
 
+
+
     /** @param {MouseEvent} e */
     function mousemove(e) {
       Vector2.update(화면위치, Vector2.difference(reference, [e.offsetX, e.offsetY]));
     }
+
+
+
     /** @param {MouseEvent} e */
     function mouseup(e) {
       if (e.button != 1) return;
@@ -95,8 +116,12 @@ class MouseWheelMove {
       removeEventListener('mousemove', mouseup);
     }
 
+
+
   }
 }
+
+
 
 /**
  * @param {Number} val

@@ -4,6 +4,8 @@ import {getIndexByLocation} from '../functions/location.js';
 
 const [x, y] = [0, 1];
 
+
+
 /**
  * requestAnimationFrame
  */
@@ -17,6 +19,8 @@ export class Renderer {
    */
   constructor(ctx, 화면위치, 격자크기, getRenderingDataByLocation, connectionList) {
     performFrame();
+
+
 
     function performFrame() {
       const 격자배율 = 격자크기[y]; // 격자크기[y] = 격자배율 / 2
@@ -58,6 +62,8 @@ export class Renderer {
       requestAnimationFrame(performFrame);
     }
 
+
+
     /**
      * @param {Number[]} reference
      * @param {Number[]} tileSize
@@ -74,6 +80,8 @@ export class Renderer {
       ctx.fill();
     }
 
+
+
     function* 출력위치() {
       const 타일크기 = [격자크기[x]*2, 격자크기[y]*3],
         시작 = Vector2.divfloor(Vector2.scalarMul(화면위치, -1), 타일크기),
@@ -84,6 +92,8 @@ export class Renderer {
         yield Vector2.add(시작, [ix-1, iy-1]);
       }
     }
+
+
 
     /**
      * @param {Number[]} reference
@@ -96,8 +106,12 @@ export class Renderer {
       ]
     }
 
+
+
   }
 }
+
+
 
 export class Overlay {
   /**
@@ -131,6 +145,8 @@ export class Connection {
     this.path      = path
   }
 }
+
+
 
 /**
  * @param {Number[]} max
