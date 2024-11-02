@@ -26,7 +26,7 @@ export function createGetRenderingDataByLocation(max, palette, data, overlayList
 
 /** @param {Number[]} rgb */
 function getStrByRGB(rgb) {
-  return `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+  return '#' + ((rgb[0]<<16) + (rgb[1]<<8) + rgb[2]<<0).toString(16).padStart(6,'0');
 }
 /**
  * @param {Number[]} baseRgb
