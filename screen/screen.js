@@ -12,7 +12,7 @@ export class Screen {
   /**
    * @param {HTMLCanvasElement} canvas
    * @param {Number[]} mouseLocation
-   * @param {(location: number[]) => String | undefined} getRenderingDataByLocation
+   * @param {(location: Number[]) => Number[] | undefined} getRenderingDataByLocation
    * @param {import('./structure.js').Connection[]} connectionList
    */
   constructor(canvas, mouseLocation, getRenderingDataByLocation, connectionList) {

@@ -1,5 +1,6 @@
 // @ts-check
 import {getIndexByLocation} from '../functions/location.js';
+import * as RBG from '../functions/rgb.js'
 
 /**
  * @param {Number[]} max
@@ -16,27 +17,10 @@ export function createGetRenderingDataByLocation(max, palette, data, overlayList
 
     for (const overlay of overlayList) {
       if (overlay.indexSet.has(index)) {
-        rgb = mixRGBs(rgb, overlay.rgb, overlay.alpha);
+        rgb = RBG.mixRGBs(rgb, overlay.rgb, overlay.alpha);
       }
     }
 
-    return getStrByRGB(rgb);
+    return rgb;
   }
-}
-
-/** @param {Number[]} rgb */
-function getStrByRGB(rgb) {
-  return '#' + ((rgb[0]<<16) + (rgb[1]<<8) + rgb[2]<<0).toString(16).padStart(6,'0');
-}
-/**
- * @param {Number[]} baseRgb
- * @param {Number[]} rgb
- * @param {Number} alpha 0~1
-*/
-function mixRGBs(baseRgb, rgb, alpha) {
-  return [
-    baseRgb[0] + (rgb[0]-baseRgb[0])*alpha,
-    baseRgb[1] + (rgb[1]-baseRgb[1])*alpha,
-    baseRgb[2] + (rgb[2]-baseRgb[2])*alpha
-  ]
 }

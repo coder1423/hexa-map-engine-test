@@ -1,5 +1,6 @@
 // @ts-check
 import * as Vector2 from '../functions/vector2.js';
+import * as RBG from '../functions/rgb.js'
 
 const [x, y] = [0, 1];
 
@@ -13,7 +14,7 @@ export class Renderer {
    * @param {CanvasRenderingContext2D} ctx
    * @param {Number[]} 화면위치
    * @param {Number[]} 격자크기
-   * @param {(location: Number[]) => String | undefined} getRenderingDataByLocation
+   * @param {(location: Number[]) => Number[] | undefined} getRenderingDataByLocation
    * @param {import('./structure.js').Connection[]} connectionList
    */
   constructor(ctx, 화면위치, 격자크기, getRenderingDataByLocation, connectionList) {
@@ -39,7 +40,7 @@ export class Renderer {
         const location = Vector2.add(시작, [ix, iy]);
         const color = getRenderingDataByLocation(location);
         if (color === undefined) continue;
-        ctx.fillStyle = color;
+        ctx.fillStyle = RBG.getStrByRGB(color);
 
         const drawingVector = getDrawingVectorByLocation(타일기준, location);
         if (확대모드) {
