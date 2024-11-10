@@ -1,6 +1,6 @@
 // @ts-check
 import {Interaction} from './interaction.js';
-import * as Map from '../map-data.js';
+import * as Map from './map-data.js';
 import {Screen} from '../screen/screen.js';
 import {createGetRenderingDataByLocation} from '../screen/create-get-rendering-data-by-location.js';
 

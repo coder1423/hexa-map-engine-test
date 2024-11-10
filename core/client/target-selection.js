@@ -9,6 +9,7 @@ import {getPathByPathtree} from '../functions/pathfinding/get-path-by-pathtree.j
 
 /**
  * @todo 선택 대상을 어떻게 상호작용의 다른 기능들과 공유할지 생각하기.
+ * @todo 이곳 이름을 TargetSelection이 아니라 Selection으로 바꾸는게 어떨지 생각하기.
  */
 export class TargetSelection {
   /**
