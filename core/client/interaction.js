@@ -1,6 +1,5 @@
 // @ts-check
 import * as Location from '../functions/location.js';
-import {Rendering} from '../structure/rendering.js';
 const value = 0;
 
 
@@ -16,16 +15,6 @@ export class Interaction {
     const {size, data} = model;
 
     let 지형선택 = [0];
-
-    const overlayList = [];
-    const connectionList = [];
-    const rendering = new Rendering(overlayList, connectionList);
-
-    /** @type {import('../structure/rendering.js').Overlay[]} */
-    this.overlayList = overlayList;
-    /** @type {import('../structure/rendering.js').Connection[]} */
-    this.connectionList = connectionList;
-    this.rendering = rendering;
 
     root.appendChild(canvas);
     canvas.classList.add('layer');

@@ -33,17 +33,3 @@ export class Connection {
     this.path = path;
   }
 }
-
-export class Rendering {
-  /**
-   * @param {Overlay[]} overlayList
-   * @param {Connection[]} connectionList
-   */
-  constructor(
-    overlayList,
-    connectionList,
-  ) {
-    this.overlayList = overlayList;
-    this.connectionList = connectionList;
-  }
-}

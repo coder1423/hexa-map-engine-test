@@ -17,8 +17,8 @@ function init() {
   if (!root) return;
 
   const screen = new Screen();
+  const renderer = new Renderer(screen, model);
   const interaction = new Interaction(root, screen, model);
-  Selection(screen, interaction, model);
-  Renderer(screen, interaction.rendering, model);
+  Selection(screen, renderer, interaction, model);
 
 }

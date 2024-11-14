@@ -8,15 +8,15 @@ import {getPathByPathtree} from '../functions/pathfinding/get-path-by-pathtree.j
 
 
 /**
- * @todo 추후에 interaction.js와 더 긴밀하게 통합될 수 있을지 고려중.
- *
  * @param {import('../modules/screen.js').Screen} screen
- * @param {import('./interaction.js').Interaction} interaction
+ * @param {import('../modules/renderer.js').Renderer} renderer
+ * @param {import('./interaction.js').Interaction} interaction @todo 추후에 interaction.js와 더 긴밀하게 통합될 수 있을지 고려중.
  * @param {import('../structure/model.js').Model} model
  */
-export function Selection(screen, interaction, model) {
+export function Selection(screen, renderer, interaction, model) {
   const {canvas, mouseLocation} = screen;
-  const {overlayList, connectionList} = interaction;
+  const {overlayList, connectionList} = renderer;
+  const {} = interaction;
   const {size, data} = model
 
   const visibleSet = new Set();
