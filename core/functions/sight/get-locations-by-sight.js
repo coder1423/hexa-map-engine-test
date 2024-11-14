@@ -14,7 +14,7 @@ import * as Location from '../location.js';
  * @param {Number} maxDistance
  * @param {Number[]} start
  * @param {Number[]} max
- * @param {(index: Number) => Number} get높이ByIndex
+ * @param {(index: Number) => Number} get높이ByIndex 나중에 get가림높이ByIndex와 get지반?높이ByIndex로 나누기
  */
 export function getLocationsBySight(maxDistance, start, max, get높이ByIndex) {
   const startIndex = Location.getIndexByLocation(start, max);

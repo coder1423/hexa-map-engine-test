@@ -1,9 +1,8 @@
-/** 
+/**
  * objectName
- * ClassName
+ * ClassName, ClosureName
  * funcName
- * file-name
- * folder-name
+ * file-name, folder-name
  */
 
 /**
@@ -15,7 +14,7 @@
  * check   : 상태 논리값 반환
  * is      : 타입 논리값 반환
  * transform??
- * 
+ *
  * handle  : 이벤트 처리
  * set     : 값 설정
  * update  : 상태 일부수정
@@ -25,14 +24,7 @@
  */
 
 /**
- * function  : 전역순수함수, 클로저내부메서드
- * =>        : 동적생성함수
- * class     : 클로저, 구조체, 자료구조
- * function* : 반복자
- */
-
-/**
- * vector2는 2차원 xy 화면상의 위치
- * location은 타일상의 xy 위치
+ * vector2는 모든 2차원상의 xy 위치
+ * location은 타일상의 xy 위치 // window.location와 혼동하지 않도록 주의할 것.
  * index는 타일의 배열상의 실제위치
  */

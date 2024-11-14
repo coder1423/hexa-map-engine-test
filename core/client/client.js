@@ -1,37 +1,24 @@
 // @ts-check
+import {Screen} from '../modules/screen.js';
 import {Interaction} from './interaction.js';
-import * as Map from './map-data.js';
-import {Screen} from '../screen/screen.js';
-import {createGetRenderingDataByLocation} from '../screen/create-get-rendering-data-by-location.js';
+import {Selection} from './selection.js';
+import {Renderer} from '../modules/renderer.js';
+import {model} from '../modules/data.js';
 
-addEventListener('load',() => new Client(), {once : true});
+addEventListener('load', init, {once : true});
 
 
 
 /**
  * 브라우져 전역 데이터, 서버통신, 데이터 테이블
  */
-class Client {
-  constructor() {
-    const root = document.querySelector('main');
-    if (!root) return;
+function init() {
+  const root = document.querySelector('main');
+  if (!root) return;
 
-    const mouseLocation = [0, 0];
+  const screen = new Screen();
+  const interaction = new Interaction(root, screen, model);
+  Selection(screen, interaction, model);
+  Renderer(screen, interaction.rendering, model);
 
-    /** @type {import('../screen/structure.js').Overlay[]} */
-    const overlayList = [];
-
-    /** @type {import('../screen/structure.js').Connection[]} */
-    const connectionList = [];
-
-    const getRenderingDataByLocation = createGetRenderingDataByLocation(Map.size, Map.palette, Map.data, overlayList);
-
-    const canvas = document.createElement('canvas');
-
-    new Interaction(root, canvas, mouseLocation, overlayList, connectionList, Map.size, Map.data);
-    new Screen(canvas, mouseLocation, getRenderingDataByLocation, connectionList);
-
-
-
-  }
 }
