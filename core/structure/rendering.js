@@ -21,7 +21,7 @@ export class Connection {
   /**
    * @param {String} rgbaStr
    * @param {Number} lineWidth
-   * @param {Number[][]} path location[][]
+   * @param {Number[][]} path location[]
    */
   constructor(
     rgbaStr,

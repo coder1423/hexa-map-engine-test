@@ -44,10 +44,10 @@ export class Screen {
 
 
 /**
-   * @param {HTMLElement} node
-   * @param {Number[]} 화면위치
-   * @param {Number[]} 격자크기
-   */
+ * @param {HTMLElement} node
+ * @param {Number[]} 화면위치
+ * @param {Number[]} 격자크기
+ */
 function Wheel(node, 화면위치, 격자크기) {
   const mulWheel = 0.04, min = 5, max = 50, 격자비율 = [3**0.5/2, 1/2];
   let 격자배율 = 25;
